@@ -1,9 +1,15 @@
+#include "grman/grman.h"
 #include <iostream>
 
-using namespace std;
+#include "graphe.h"
 
 int main()
 {
-    cout << "Hello world!" << endl;
+    grman::init();
+    grman::set_pictures_path("foto");
+    grman::fermer_allegro();
+
+
     return 0;
 }
+END_OF_MAIN();

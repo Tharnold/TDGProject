@@ -1,0 +1,56 @@
+# depslib dependency file v1.0
+1522575069 source:d:\thiba\tdgproject\tdgproject\grman\coords.cpp
+	"coords.h"
+
+1522575424 d:\thiba\tdgproject\tdgproject\grman\coords.h
+	<cmath>
+
+1522515823 source:d:\thiba\tdgproject\tdgproject\grman\grman.cpp
+	<cmath>
+	<unordered_map>
+	<unordered_set>
+	<utility>
+	<string>
+	<iostream>
+	<regex>
+	"grman.h"
+	<allegro.h>
+	<png.h>
+	<loadpng.h>
+	<jpgalleg.h>
+
+1522539041 d:\thiba\tdgproject\tdgproject\grman\grman.h
+	<allegro.h>
+	<string>
+	"grman_couleurs.h"
+	"coords.h"
+	"widget.h"
+
+1509222372 d:\thiba\tdgproject\tdgproject\grman\grman_couleurs.h
+
+1522636616 d:\thiba\tdgproject\tdgproject\grman\widget.h
+	"grman.h"
+	<iostream>
+	<string>
+	<vector>
+	<algorithm>
+	<allegro.h>
+
+1522636919 source:d:\thiba\tdgproject\tdgproject\grman\widget.cpp
+	"widget.h"
+
+1522878326 source:d:\thiba\tdgproject\tdgproject\main.cpp
+	"grman/grman.h"
+	<iostream>
+	"graphe.h"
+
+1522878451 d:\thiba\tdgproject\tdgproject\graphe.h
+	<vector>
+	<map>
+	<string>
+	<memory>
+	"grman/grman.h"
+
+1522878564 source:d:\thiba\tdgproject\tdgproject\graphe.cpp
+	"graphe.h"
+
