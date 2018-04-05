@@ -149,6 +149,8 @@ m_interface= std::make_shared<GrapheInterface>(50, 0, 750, 600);
     {
         fichier >> nb_sommets;
         fichier >> nb_arretes;
+        m_ordre=nb_sommets;
+        m_nbarcs=nb_arretes;
         for(int i=0; i< nb_sommets; i++)
         {
             fichier >> idx;
@@ -181,7 +183,7 @@ m_interface= std::make_shared<GrapheInterface>(50, 0, 750, 600);
     }
 }
 
-void Graphe::sauvegarde(std::string nom)
+/*void Graphe::sauvegarde(std::string nom)
 {
     char* fich[50];
     fich=nom.c_str();
@@ -189,8 +191,12 @@ void Graphe::sauvegarde(std::string nom)
     if(fichier)
     {
 
+        for(auto &elt : m_sommets)
+        {
+
+        }
     }
-}
+}*/
 
 
 void Graphe::update()
@@ -199,40 +205,45 @@ void Graphe::update()
         return;
 
     for (auto &elt : m_sommets)
-        elt.second.pre_update();
+        //elt.second.pre_update();
+        elt.pre_update();
 
     for (auto &elt : m_arcs)
-        elt.second.pre_update();
+        //elt.second.pre_update();
+        elt.pre_update();
 
     m_interface->m_top_box.update();
 
     for (auto &elt : m_sommets)
-        elt.second.post_update();
+        //elt.second.post_update();
+        elt.post_update();
 
     for (auto &elt : m_arcs)
-        elt.second.post_update();
+        //elt.second.post_update();
+        elt.post_update();
 
 }
 
 void Graphe::add_interfaced_sommet(int idx, double valeur, int x, int y, std::string nom_foto, double fertilite, double deces_mois, int foto_idx )
 {
-    if ( m_sommets.find(idx)!=m_sommets.end() )
+    /*if ( m_sommets.find(idx)!=m_sommets.end() )
     {
         std::cerr << "Error adding sommet at idx=" << idx << " already used..." << std::endl;
         throw "Error adding sommet";
-    }
+    }*/
     // Création d'une interface de sommet
     SommetInterface *vi = new SommetInterface(idx, x, y, nom_foto, foto_idx);
     // Ajout de la top box de l'interface de sommet
     m_interface->m_main_box.add_child(vi->m_top_box);
     // On peut ajouter directement des vertices dans la map avec la notation crochet :
-    m_sommets[idx] = Sommet(valeur, vi);
-    m_sommets[idx].ajouter_var(fertilite,deces_mois);
+    Sommet som_prov(valeur, vi, idx);
+    som_prov.ajouter_var(fertilite,deces_mois);
+    m_sommets.push_back(som_prov);
 }
 
 void Graphe::add_interfaced_arc(int idx, int id_som1, int id_som2, double poids)
 {
-    if ( m_arcs.find(idx)!=m_arcs.end() )
+    /*if ( m_arcs.find(idx)!=m_arcs.end() )
     {
         std::cerr << "Error adding arc at idx=" << idx << " already used..." << std::endl;
         throw "Error adding arc";
@@ -242,9 +253,9 @@ void Graphe::add_interfaced_arc(int idx, int id_som1, int id_som2, double poids)
     {
         std::cerr << "Error adding arc idx=" << idx << " between sommets " << id_som1 << " and " << id_som2 << " not in m_sommets" << std::endl;
         throw "Error adding arc";
-    }
+    }*/
 
     ArcInterface *ei = new ArcInterface(m_sommets[id_som1], m_sommets[id_som2]);
     m_interface->m_main_box.add_child(ei->m_top_edge);
-    m_arcs[idx] = Arc(poids, ei);
+    m_arcs.push_back(Arc(poids, ei, idx));
 }
