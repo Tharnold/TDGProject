@@ -7,6 +7,18 @@ int main()
 {
     grman::init();
     grman::set_pictures_path("foto");
+
+    Graphe test;
+    test.premier_graphe();
+
+    while ( !key[KEY_ESC] )
+    {
+        test.update();
+        grman::mettre_a_jour();
+    }
+
+
+
     grman::fermer_allegro();
 
 

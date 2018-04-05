@@ -112,6 +112,7 @@ public:
         void add_interfaced_sommet(int idx, double valeur, int x, int y, std::string nom_foto="", int foto_idx=0 );
         void add_interfaced_arc(int idx, int som1, int som2, double poids=0);
 
+        void premier_graphe();
         void update();
 
 };

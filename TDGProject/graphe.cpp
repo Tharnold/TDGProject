@@ -125,6 +125,31 @@ GrapheInterface::GrapheInterface(int x, int y, int w, int h)
     m_main_box.set_bg_color(BLANCJAUNE);
 }
 
+void Graphe::premier_graphe()
+{
+    m_interface = std::make_shared<GrapheInterface>(50, 0, 750, 600);
+
+    add_interfaced_sommet(0, 30.0, 200, 100, "black-ant.png");
+    add_interfaced_sommet(1, 60.0, 400, 100, "clouded-leopard.png");
+    add_interfaced_sommet(2, 50.0, 200, 300, "down-bat.png");
+    add_interfaced_sommet(3,  0.0, 400, 300, "earthworm.png");
+    add_interfaced_sommet(4,  100.0, 600, 300, "poison-dart-frog.png");
+    add_interfaced_sommet(5,  0.0, 100, 500, "saprophytes.png");
+    add_interfaced_sommet(6,  0.0, 300, 500, "sloth.png");
+    add_interfaced_sommet(7,  0.0, 500, 500, "spider-monkey.png");
+
+    add_interfaced_arc(0, 5, 7, 50.0);
+    add_interfaced_arc(1, 5, 6, 50.0);
+    add_interfaced_arc(2, 1, 7, 75.0);
+    add_interfaced_arc(3, 1, 6, 25.0);
+    add_interfaced_arc(4, 5, 1, 25.0);
+    add_interfaced_arc(5, 5, 4, 25.0);
+    add_interfaced_arc(6, 4, 0, 0.0);
+    add_interfaced_arc(7, 4, 3, 100.0);
+    add_interfaced_arc(8, 3, 5, 20.0);
+    add_interfaced_arc(9, 2, 3, 80.0);
+}
+
 void Graphe::update()
 {
     if (!m_interface)
@@ -150,8 +175,8 @@ void Graphe::add_interfaced_sommet(int idx, double valeur, int x, int y, std::st
 {
     if ( m_sommets.find(idx)!=m_sommets.end() )
     {
-        std::cerr << "Error adding vertex at idx=" << idx << " already used..." << std::endl;
-        throw "Error adding vertex";
+        std::cerr << "Error adding sommet at idx=" << idx << " already used..." << std::endl;
+        throw "Error adding sommet";
     }
     // Création d'une interface de sommet
     SommetInterface *vi = new SommetInterface(idx, x, y, nom_foto, foto_idx);
