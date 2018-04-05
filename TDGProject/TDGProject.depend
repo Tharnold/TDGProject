@@ -54,3 +54,58 @@
 1522927535 source:d:\thiba\tdgproject\tdgproject\graphe.cpp
 	"graphe.h"
 
+1522937081 source:c:\users\pierre philbert\tdgproject\tdgproject\graphe.cpp
+	"graphe.h"
+
+1522937081 c:\users\pierre philbert\tdgproject\tdgproject\graphe.h
+	<vector>
+	<map>
+	<string>
+	<memory>
+	"grman/grman.h"
+
+1522937081 c:\users\pierre philbert\tdgproject\tdgproject\grman\grman.h
+	<allegro.h>
+	<string>
+	"grman_couleurs.h"
+	"coords.h"
+	"widget.h"
+
+1522937081 c:\users\pierre philbert\tdgproject\tdgproject\grman\grman_couleurs.h
+
+1522937081 c:\users\pierre philbert\tdgproject\tdgproject\grman\coords.h
+	<cmath>
+
+1522937081 c:\users\pierre philbert\tdgproject\tdgproject\grman\widget.h
+	"grman.h"
+	<iostream>
+	<string>
+	<vector>
+	<algorithm>
+	<allegro.h>
+
+1522937081 source:c:\users\pierre philbert\tdgproject\tdgproject\grman\coords.cpp
+	"coords.h"
+
+1522937081 source:c:\users\pierre philbert\tdgproject\tdgproject\grman\grman.cpp
+	<cmath>
+	<unordered_map>
+	<unordered_set>
+	<utility>
+	<string>
+	<iostream>
+	<regex>
+	"grman.h"
+	<allegro.h>
+	<png.h>
+	<loadpng.h>
+	<jpgalleg.h>
+
+1522937081 source:c:\users\pierre philbert\tdgproject\tdgproject\grman\widget.cpp
+	"widget.h"
+
+1522937081 source:c:\users\pierre philbert\tdgproject\tdgproject\main.cpp
+	"grman/grman.h"
+	<iostream>
+	"graphe.h"
+
