@@ -39,12 +39,13 @@ class Sommet
 private:
     std::vector <int> m_in;
     std::vector <int> m_out;
-    double m_valeur;
+    double m_valeur,m_fertilite,m_deces_mois;
     std::shared_ptr<SommetInterface> m_interface = nullptr;
 
 public:
     Sommet(double valeur=0, SommetInterface *interface=nullptr) :
             m_valeur(valeur), m_interface(interface)  {  }
+    void ajouter_var(double fertilite, double deces);
 
     void pre_update();
     void post_update();
@@ -112,11 +113,11 @@ public:
     Graphe (GrapheInterface *interface=nullptr) :
             m_interface(interface)  {  }
 
-        void add_interfaced_sommet(int idx, double valeur, int x, int y, std::string nom_foto="", int foto_idx=0 );
+        void add_interfaced_sommet(int idx, double valeur, int x, int y, std::string nom_foto="", double fertilite=0.0, double deces_mois=0.0, int foto_idx=0);
         void add_interfaced_arc(int idx, int som1, int som2, double poids=0);
 
-        void premier_graphe();
         void lecture(std::string nom);
+        void sauvegarde(std::string nom);
         void update();
 
 };

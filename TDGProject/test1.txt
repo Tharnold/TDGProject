@@ -1,13 +1,13 @@
 8
 10
-0 30.0 200 100 black-ant.png
-1 60.0 400 100 clouded-leopard.png
-2 50.0 200 300 down-bat.png
-3 0.0 400 300 earthworm.png
-4 100.0 600 300 poison-dart-frog.png
-5 0.0 100 500 saprophytes.png
-6 0.0 300 500 sloth.png
-7 0.0 500 500 spider-monkey.png
+0 30.0 200 100 black-ant.png 0.1 0.01
+1 60.0 400 100 clouded-leopard.png 0.1 0.01
+2 50.0 200 300 down-bat.png 0.1 0.01
+3 0.0 400 300 earthworm.png 0.1 0.01
+4 100.0 600 300 poison-dart-frog.png 0.1 0.01
+5 0.0 100 500 saprophytes.png 0.1 0.01
+6 0.0 300 500 sloth.png 0.1 0.01
+7 0.0 500 500 spider-monkey.png 0.1 0.01
 0 5 7 50.0
 1 5 6 50.0
 2 1 7 75.0

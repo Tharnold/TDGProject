@@ -6,23 +6,20 @@
 int main()
 {
     std::string nom;
-    std::cin >>nom;
+
     grman::init();
     grman::set_pictures_path("foto");
-
+    std::cin >>nom;
     Graphe test;
-   // test.premier_graphe();
-test.lecture(nom);
+    test.lecture(nom);
+
     while ( !key[KEY_ESC] )
     {
         test.update();
         grman::mettre_a_jour();
     }
 
-
-
     grman::fermer_allegro();
-
 
     return 0;
 }
