@@ -30,14 +30,19 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
+			<Add option="-std=c++11" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Linker>
+			<Add library="loadpng" />
+			<Add library="png16.dll" />
+			<Add library="jpgalleg" />
+			<Add library="alleg44.dll" />
+		</Linker>
 		<Unit filename="graphe.cpp" />
 		<Unit filename="graphe.h" />
 		<Unit filename="grman/coords.cpp" />
 		<Unit filename="grman/coords.h" />
-		<Unit filename="grman/graphe.cpp" />
-		<Unit filename="grman/graphe.h" />
 		<Unit filename="grman/grman.cpp" />
 		<Unit filename="grman/grman.h" />
 		<Unit filename="grman/grman_couleurs.h" />
