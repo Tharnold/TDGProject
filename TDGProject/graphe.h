@@ -6,6 +6,8 @@
 #include <map>
 #include <string>
 #include <memory>
+#include <fstream>
+#include <iostream>
 
 #include "grman/grman.h"
 
@@ -100,6 +102,7 @@ public:
 
 class Graphe
 {
+   // friend class GrapheInterface;
 private:
     std::map<int, Arc> m_arcs;
     std::map<int, Sommet> m_sommets;
@@ -113,6 +116,7 @@ public:
         void add_interfaced_arc(int idx, int som1, int som2, double poids=0);
 
         void premier_graphe();
+        void lecture(std::string nom);
         void update();
 
 };
