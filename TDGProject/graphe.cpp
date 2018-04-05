@@ -150,6 +150,17 @@ void Graphe::premier_graphe()
     add_interfaced_arc(9, 2, 3, 80.0);
 }
 
+void Graphe::Graphe(GrapheInterface *interface=nullptr, std::string fichier)
+{
+    char* fich[50];
+    fich=fichier.c_str();
+    std::ifstream fichier_lu(fich, std::ios::in);
+    if (fichier_lu)
+    {
+
+    }
+}
+
 void Graphe::update()
 {
     if (!m_interface)
