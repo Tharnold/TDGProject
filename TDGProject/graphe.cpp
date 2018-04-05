@@ -198,6 +198,17 @@ m_interface= std::make_shared<GrapheInterface>(50, 0, 750, 600);
     }
 }
 
+void Graphe::Graphe(GrapheInterface *interface=nullptr, std::string fichier)
+{
+    char* fich[50];
+    fich=fichier.c_str();
+    std::ifstream fichier_lu(fich, std::ios::in);
+    if (fichier_lu)
+    {
+
+    }
+}
+
 void Graphe::update()
 {
     if (!m_interface)
