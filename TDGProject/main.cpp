@@ -5,12 +5,14 @@
 
 int main()
 {
+    std::string nom;
+    std::cin >>nom;
     grman::init();
     grman::set_pictures_path("foto");
 
     Graphe test;
-    test.premier_graphe();
-
+   // test.premier_graphe();
+test.lecture(nom);
     while ( !key[KEY_ESC] )
     {
         test.update();

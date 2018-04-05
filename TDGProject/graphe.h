@@ -109,7 +109,7 @@ private:
     std::shared_ptr<GrapheInterface> m_interface = nullptr;
 
 public:
-    Graphe (GrapheInterface *interface=nullptr, std::string fichier) :
+    Graphe (GrapheInterface *interface=nullptr) :
             m_interface(interface)  {  }
 
         void add_interfaced_sommet(int idx, double valeur, int x, int y, std::string nom_foto="", int foto_idx=0 );

@@ -2,7 +2,7 @@
 10
 0 30.0 200 100 black-ant.png
 1 60.0 400 100 clouded-leopard.png
-2 50.0 200 300 down-bet.png
+2 50.0 200 300 down-bat.png
 3 0.0 400 300 earthworm.png
 4 100.0 600 300 poison-dart-frog.png
 5 0.0 100 500 saprophytes.png
