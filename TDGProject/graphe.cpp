@@ -1,4 +1,4 @@
-#include "graphe.h"
+﻿#include "graphe.h"
 
 SommetInterface::SommetInterface(int idx, int x, int y, std::string nom_foto, int foto_idx)
 {
@@ -475,7 +475,7 @@ void Graphe::add_interfaced_sommet(int idx, double valeur, int x, int y, std::st
         std::cerr << "Error adding sommet at idx=" << idx << " already used..." << std::endl;
         throw "Error adding sommet";
     }*/
-    // Cr�ation d'une interface de sommet
+    // Creation d'une interface de sommet
     SommetInterface *vi = new SommetInterface(idx, x, y, nom_foto, foto_idx);
 
     // Ajout de la top box de l'interface de sommet
