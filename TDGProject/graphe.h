@@ -50,6 +50,7 @@ public:
 
     void pre_update();
     void post_update();
+    int positif(int a, int b);
 };
 
 class ArcInterface

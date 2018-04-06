@@ -274,3 +274,13 @@ void Graphe::add_interfaced_arc(int idx, int id_som1, int id_som2, double poids)
     larc.m_to=id_som2;
     m_arcs.push_back(larc);
 }
+
+
+int Sommet::positif(int a, int b)
+{
+    if(a-b<0)
+        return 0;
+
+    else
+        return a-b;
+}
