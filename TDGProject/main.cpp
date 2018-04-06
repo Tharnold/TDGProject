@@ -9,9 +9,9 @@ int main()
 
     grman::init();
     grman::set_pictures_path("foto");
-    std::cin >>nom;
+   // std::cin >>nom;
     Graphe test;
-    test.lecture(nom);
+    test.lecture("test1");
 
     while ( !key[KEY_ESC] )
     {

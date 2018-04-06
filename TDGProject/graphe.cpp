@@ -9,7 +9,7 @@ SommetInterface::SommetInterface(int idx, int x, int y, std::string nom_foto, in
 
     // Le slider de réglage de valeur
     m_top_box.add_child( m_slider_value );
-    m_slider_value.set_range(0.0 , 100.0); // Valeurs arbitraires, à adapter...
+    m_slider_value.set_range(0.0, 100.0);  // Valeurs arbitraires, à adapter...
     m_slider_value.set_dim(20,80);
     m_slider_value.set_gravity_xy(grman::GravityX::Left, grman::GravityY::Up);
 
@@ -34,6 +34,13 @@ SommetInterface::SommetInterface(int idx, int x, int y, std::string nom_foto, in
 
     m_box_label_idx.add_child( m_label_idx );
     m_label_idx.set_message( std::to_string(idx) );
+    //La croix pour suprimer un sommet
+    m_top_box.add_child( m_bouton_delete );
+    m_bouton_delete.set_frame(114,3,16,16);
+    m_bouton_delete.set_bg_color(ROUGE);
+
+    m_bouton_delete.add_child(m_bouton_delete_label);
+    m_bouton_delete_label.set_message("X");
 }
 
 void Sommet::ajouter_var(double fertilite, double deces)
@@ -83,7 +90,7 @@ ArcInterface::ArcInterface(Sommet& from, Sommet& to)
 
     // Le slider de réglage de valeur
     m_box_edge.add_child( m_slider_weight );
-    m_slider_weight.set_range(0.0 , 100.0); // Valeurs arbitraires, à adapter...
+    m_slider_weight.set_range(0.0, 100.0);  // Valeurs arbitraires, à adapter...
     m_slider_weight.set_dim(16,40);
     m_slider_weight.set_gravity_y(grman::GravityY::Up);
 
@@ -128,6 +135,38 @@ GrapheInterface::GrapheInterface(int x, int y, int w, int h)
     m_main_box.set_dim(908,720);
     m_main_box.set_gravity_xy(grman::GravityX::Right, grman::GravityY::Up);
     m_main_box.set_bg_color(BLANCJAUNE);
+    //Bouton ajout de sommet
+    m_tool_box.add_child(m_bouton_ajout_sommet);
+    m_bouton_ajout_sommet.set_frame(3,3,77,40);
+    m_bouton_ajout_sommet.set_bg_color(VERTCLAIR);
+    m_bouton_ajout_sommet.add_child(m_bouton_ajout_sommet_label);
+    m_bouton_ajout_sommet_label.set_message("Add");
+    //Bouton ajout d une arete de type 1
+    m_tool_box.add_child(m_bouton_ajout_arete1);
+    m_bouton_ajout_arete1.set_frame(3,43,77,40);
+    m_bouton_ajout_arete1.set_bg_color(VERTCLAIR);
+    m_bouton_ajout_arete1.add_child(m_bouton_ajout_arete1_label);
+    m_bouton_ajout_arete1_label.set_message("Add");
+    //Bouton pour une arte de type 2
+    m_tool_box.add_child(m_bouton_ajout_arete2);
+    m_bouton_ajout_arete2.set_frame(3,83,77,40);
+    m_bouton_ajout_arete2.set_bg_color(VERTCLAIR);
+    m_bouton_ajout_arete2.add_child(m_bouton_ajout_arete2_label);
+    m_bouton_ajout_arete2_label.set_message("Add");
+    // bouton pour load
+     m_tool_box.add_child(m_bouton_load);
+    m_bouton_load.set_frame(3,123,77,40);
+    m_bouton_load.set_bg_color(VERTCLAIR);
+    m_bouton_load.add_child(m_bouton_load_label);
+    m_bouton_load_label.set_message("Load");
+    //bouton pour save
+     m_tool_box.add_child(m_bouton_save);
+    m_bouton_save.set_frame(3,163,77,40);
+    m_bouton_save.set_bg_color(VERTCLAIR);
+    m_bouton_save.add_child(m_bouton_save_label);
+    m_bouton_save_label.set_message("Save");
+
+
 }
 
 void Graphe::lecture(std::string nom)
@@ -137,8 +176,8 @@ void Graphe::lecture(std::string nom)
     nf=nom;
     nf+=".txt";
     //VALEURS POUR STOCKER LES DONEES DU FICHIER
-  //  Graphe tmp;
-m_interface= std::make_shared<GrapheInterface>(50, 0, 750, 600);
+    //  Graphe tmp;
+    m_interface= std::make_shared<GrapheInterface>(50, 0, 750, 600);
     int idx,x,y; // pour les arretes x et y coresspondent respectivement a id_som1 et id_som2
     double val,fertilite,deces;// pour les arretes coresspond a poids
     std::string nom_foto;
@@ -173,7 +212,8 @@ m_interface= std::make_shared<GrapheInterface>(50, 0, 750, 600);
             add_interfaced_arc(idx,x,y,val);
         }
 
-       // return tmp;
+        // return tmp;
+        //  std::cout << m_sommets[1].m_interface->m_top_box.get_posx();
 
     }
     else
@@ -181,6 +221,9 @@ m_interface= std::make_shared<GrapheInterface>(50, 0, 750, 600);
 
         std::cerr <<"l'ouverture du fichier est un echec cuisant"<< std::endl;
     }
+
+
+
 }
 
 /*void Graphe::sauvegarde(std::string nom)
@@ -203,26 +246,111 @@ void Graphe::update()
 {
     if (!m_interface)
         return;
-
+//std::cout<<"test"<<std::endl;
     for (auto &elt : m_sommets)
         //elt.second.pre_update();
         elt.pre_update();
-
+//std::cout<<"test2"<<std::endl;
     for (auto &elt : m_arcs)
         //elt.second.pre_update();
         elt.pre_update();
-
+//std::cout<<"test3"<<std::endl;
     m_interface->m_top_box.update();
-
+//std::cout<<"test4"<<std::endl;
     for (auto &elt : m_sommets)
         //elt.second.post_update();
         elt.post_update();
-
+//std::cout<<"test5"<<std::endl;
     for (auto &elt : m_arcs)
         //elt.second.post_update();
         elt.post_update();
+
+    for(int i=0;i<m_sommets.size();i++)
+    {
+        if(m_sommets[i].m_interface->m_bouton_delete.clicked())
+        {
+            suppression_sommet(i);
+        }
+    }
+      for(int i=0;i<m_sommets.size();i++)
+    {
+        std::cout << m_sommets[i].m_index<<std::endl;
+    }
+ std::cout<<std::endl;
+      for(int i=0;i<m_arcs.size();i++)
+    {
+        std::cout << m_arcs[i].m_indx<<std::endl;
+    }
 
 }
+void Graphe::suppression_sommet(int indice)
+{
+    Sommet tmp;
+    Arc tmp2;
+    int done2=0;
+    int done=0;
+    //supression de toutes les arretes relie au somet
+
+    while(done2==0)
+    {   done2=1;
+        for(int i=0;i<m_arcs.size();i++)
+        {
+            if(m_arcs[i].m_from==indice ||m_arcs[i].m_to==indice )
+            {  std::cout<<"test";
+                //on suprime l arete i
+                suppression_arc(i);
+                done2=0;
+            }
+        }
+    }
+    //supression du sommet
+    for(int i=0;i<m_sommets.size();i++)
+    {
+        if(m_sommets[i].m_index==indice && done ==0)
+        {
+
+          //  m_interface->m_top_box.remove_child(m_sommets[i].m_interface->m_top_box);
+          //  delete &m_sommets[i].m_interface->m_top_box;
+          m_sommets[i].m_interface=NULL;
+            tmp=m_sommets[m_sommets.size()-1];
+
+           m_sommets[m_sommets.size()-1] = m_sommets[i];
+           m_sommets[i]=tmp;
+
+           m_sommets.pop_back();
+
+           done =1;
+        }
+    }
+
+
+
+   // std::cout<<"test"<<std::endl;
+}
+
+void Graphe::suppression_arc(int indice)
+{
+    Arc tmp;
+    int done=0;
+    for(int i=0;i<m_arcs.size();i++)
+    {
+        if(m_arcs[i].m_indx==indice && done ==0)
+        {
+            //m_interface->m_top_box.remove_child(m_arcs[i].m_interface->m_top_edge);
+           // delete &m_arcs[i].m_interface->m_top_edge;
+            tmp=m_arcs[m_arcs.size()-1];
+
+           m_arcs[m_arcs.size()-1] = m_arcs[i];
+           m_arcs[i]=tmp;
+
+           m_arcs.pop_back();
+           std::cout<<"test";
+
+           done =1;
+        }
+    }
+}
+
 
 void Graphe::add_interfaced_sommet(int idx, double valeur, int x, int y, std::string nom_foto, double fertilite, double deces_mois, int foto_idx )
 {
@@ -233,12 +361,14 @@ void Graphe::add_interfaced_sommet(int idx, double valeur, int x, int y, std::st
     }*/
     // Création d'une interface de sommet
     SommetInterface *vi = new SommetInterface(idx, x, y, nom_foto, foto_idx);
+
     // Ajout de la top box de l'interface de sommet
     m_interface->m_main_box.add_child(vi->m_top_box);
     // On peut ajouter directement des vertices dans la map avec la notation crochet :
     Sommet som_prov(valeur, vi, idx);
     som_prov.ajouter_var(fertilite,deces_mois);
     m_sommets.push_back(som_prov);
+
 }
 
 void Graphe::add_interfaced_arc(int idx, int id_som1, int id_som2, double poids)
@@ -256,6 +386,7 @@ void Graphe::add_interfaced_arc(int idx, int id_som1, int id_som2, double poids)
     }*/
 
     ArcInterface *ei = new ArcInterface(m_sommets[id_som1], m_sommets[id_som2]);
+//    *ei.pls=&*ei.m_top_edge;
     m_interface->m_main_box.add_child(ei->m_top_edge);
-    m_arcs.push_back(Arc(poids, ei, idx));
+    m_arcs.push_back(Arc(poids, ei, idx,id_som1,id_som2));
 }
