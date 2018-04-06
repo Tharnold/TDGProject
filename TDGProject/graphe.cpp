@@ -85,7 +85,7 @@ ArcInterface::ArcInterface(Sommet& from, Sommet& to)
 
     // Une boite pour englober les widgets de réglage associés
     m_top_edge.add_child(m_box_edge);
-    m_box_edge.set_dim(24,60);
+    m_box_edge.set_dim(24,75);
     m_box_edge.set_bg_color(BLANCBLEU);
 
     // Le slider de réglage de valeur
@@ -97,6 +97,14 @@ ArcInterface::ArcInterface(Sommet& from, Sommet& to)
     // Label de visualisation de valeur
     m_box_edge.add_child( m_label_weight );
     m_label_weight.set_gravity_y(grman::GravityY::Down);
+
+    //Ajout u bouton supr
+     m_box_edge.add_child( m_bouton_delete );
+    m_bouton_delete.set_frame(6,50,16,16);
+    m_bouton_delete.set_bg_color(ROUGE);
+
+    m_bouton_delete.add_child(m_bouton_delete_label);
+    m_bouton_delete_label.set_message("X");
 
 }
 
@@ -188,6 +196,7 @@ void Graphe::lecture(std::string nom)
     {
         fichier >> nb_sommets;
         fichier >> nb_arretes;
+        std::cout << "recup ordre et tt" << std::endl;
         m_ordre=nb_sommets;
         m_nbarcs=nb_arretes;
         for(int i=0; i< nb_sommets; i++)
@@ -200,16 +209,22 @@ void Graphe::lecture(std::string nom)
             fichier >> fertilite;
             fichier >> deces;
             add_interfaced_sommet(idx,val,x,y,nom_foto);
+            std::cout << "recup sommet : " << i << std::endl;
         }
         for(int i=0; i< nb_arretes; i++)
         {
+            std::cout << "début arrete " << i << std::endl;
             fichier >> idx;
-
+            std::cout << "recup idx" << std::endl;
             fichier >> x;
+            std::cout << "recup x" << std::endl;
             fichier >> y;
+            std::cout << "recup y" << std::endl;
             fichier >> val;
+            std::cout << "recup val" << std::endl;
 
             add_interfaced_arc(idx,x,y,val);
+            std::cout << "recup arc : " << i << std::endl;
         }
 
         // return tmp;
@@ -226,20 +241,33 @@ void Graphe::lecture(std::string nom)
 
 }
 
-/*void Graphe::sauvegarde(std::string nom)
+void Graphe::sauvegarde(std::string nom)
 {
-    char* fich[50];
-    fich=nom.c_str();
-    std::ofstream fichier(fich, std::ios::out | std::ios::trunc);
+    nom+=".txt";
+    std::ofstream fichier(nom, std::ios::trunc);
     if(fichier)
     {
-
+        fichier << m_ordre << std::endl;
+        fichier << m_nbarcs << std::endl;
         for(auto &elt : m_sommets)
         {
-
+            fichier << elt.m_index << " ";
+            fichier << elt.m_valeur << " ";
+            fichier << elt.m_interface->m_top_box.get_frame_pos().x << " ";
+            fichier << elt.m_interface->m_top_box.get_frame_pos().y << " ";
+            fichier << elt.m_interface->m_img.get_pic_name() << " ";
+            fichier << elt.m_fertilite << " ";
+            fichier << elt.m_deces_mois << std::endl;
+        }
+        for(auto &elt : m_arcs)
+        {
+            fichier << elt.m_indx << " ";
+            fichier << elt.m_from << " ";
+            fichier << elt.m_to << " ";
+            fichier << elt.m_poids << std::endl;
         }
     }
-}*/
+}
 
 
 void Graphe::update()
@@ -269,18 +297,21 @@ void Graphe::update()
     {
         if(m_sommets[i].m_interface->m_bouton_delete.clicked())
         {
-            suppression_sommet(i);
+            suppression_sommet(m_sommets[i].m_index);
+            m_ordre=m_ordre-1;
         }
     }
-      for(int i=0;i<m_sommets.size();i++)
+
+    for(int i=0;i<m_arcs.size();i++)
     {
-        std::cout << m_sommets[i].m_index<<std::endl;
+        if(m_arcs[i].m_interface->m_bouton_delete.clicked())
+        {
+             m_interface->m_main_box.remove_child(m_arcs[i].m_interface->m_top_edge);
+                m_arcs.erase(m_arcs.begin()+i);
+                m_nbarcs=m_nbarcs-1;
+        }
     }
- std::cout<<std::endl;
-      for(int i=0;i<m_arcs.size();i++)
-    {
-        std::cout << m_arcs[i].m_indx<<std::endl;
-    }
+
 
 }
 void Graphe::suppression_sommet(int indice)
@@ -289,6 +320,7 @@ void Graphe::suppression_sommet(int indice)
     Arc tmp2;
     int done2=0;
     int done=0;
+    grman::WidgetBox * pt;
     //supression de toutes les arretes relie au somet
 
     while(done2==0)
@@ -296,10 +328,14 @@ void Graphe::suppression_sommet(int indice)
         for(int i=0;i<m_arcs.size();i++)
         {
             if(m_arcs[i].m_from==indice ||m_arcs[i].m_to==indice )
-            {  std::cout<<"test";
+            {
                 //on suprime l arete i
-                suppression_arc(i);
+             //   std::cout<<"bitocul  "<<m_arcs[i].m_to<<"   " << i<<std::endl;
+                //suppression_arc(i);
                 done2=0;
+                 m_interface->m_main_box.remove_child(m_arcs[i].m_interface->m_top_edge);
+                m_arcs.erase(m_arcs.begin()+i);
+                m_nbarcs=m_nbarcs-1;
             }
         }
     }
@@ -311,7 +347,10 @@ void Graphe::suppression_sommet(int indice)
 
           //  m_interface->m_top_box.remove_child(m_sommets[i].m_interface->m_top_box);
           //  delete &m_sommets[i].m_interface->m_top_box;
-          m_sommets[i].m_interface=NULL;
+//          delete m_sommets[i].m_interface;
+ //pt = &m_sommets[i].m_interface.m_main_box;//copie
+            m_interface->m_main_box.remove_child(m_sommets[i].m_interface->m_top_box);//copie
+           // m_interface->m_main_box.remove_child(pt);
             tmp=m_sommets[m_sommets.size()-1];
 
            m_sommets[m_sommets.size()-1] = m_sommets[i];
@@ -336,15 +375,21 @@ void Graphe::suppression_arc(int indice)
     {
         if(m_arcs[i].m_indx==indice && done ==0)
         {
+
             //m_interface->m_top_box.remove_child(m_arcs[i].m_interface->m_top_edge);
            // delete &m_arcs[i].m_interface->m_top_edge;
-            tmp=m_arcs[m_arcs.size()-1];
+//           delete m_arcs[i].m_interface;
 
-           m_arcs[m_arcs.size()-1] = m_arcs[i];
-           m_arcs[i]=tmp;
+ m_interface->m_main_box.remove_child(m_arcs[i].m_interface->m_top_edge);//copie
+            //=m_arcs[m_arcs.size()-1];
 
-           m_arcs.pop_back();
-           std::cout<<"test";
+          // m_arcs[m_arcs.size()-1] = m_arcs[i];
+          // m_arcs[i]=tmp;
+
+           //m_arcs.pop_back();
+           std::cout<< "l arete a ete suprimee indice:"<< i<<std::endl;
+           m_arcs.erase(m_arcs.begin()+i);
+
 
            done =1;
         }

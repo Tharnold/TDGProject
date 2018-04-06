@@ -18,7 +18,7 @@ class SommetInterface
     friend class Graphe;
 private:
     grman::WidgetBox m_top_box;
-    grman::WidgetBox * pls;
+
     grman::WidgetVSlider m_slider_value;
     grman::WidgetText m_label_value;
     grman::WidgetImage m_img;
@@ -67,6 +67,8 @@ private:
     grman::WidgetBox m_box_edge;
     grman::WidgetVSlider m_slider_weight;
     grman::WidgetText m_label_weight;
+     grman::WidgetButton m_bouton_delete;
+        grman::WidgetText m_bouton_delete_label;
 
 public:
     ArcInterface(Sommet& from, Sommet& to);

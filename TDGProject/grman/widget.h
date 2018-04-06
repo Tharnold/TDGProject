@@ -336,7 +336,7 @@ class WidgetImage : public Widget
 
         void set_animate(bool ani=true) { m_animate = ani; }
         void set_animate_tempo(int tempo) { m_animate_tempo = tempo; }
-
+        std::string get_pic_name();
         void set_pic_idx(int pic_idx) { m_pic_idx=pic_idx; }
 };
 

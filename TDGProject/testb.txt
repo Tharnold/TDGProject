@@ -1,0 +1,9 @@
+8
+10
+0 30 3 3 black-ant.png 0 0
+7 0 775 617 spider-monkey.png 0 0
+2 50 3 259 down-bat.png 0 0
+3 0 775 289 earthworm.png 0 0
+4 100 775 3 poison-dart-frog.png 0 0
+5 0 3 617 saprophytes.png 0 0
+6 0 333 314 sloth.png 0 0
