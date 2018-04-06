@@ -185,10 +185,8 @@ m_interface= std::make_shared<GrapheInterface>(50, 0, 750, 600);
 
 void Graphe::sauvegarde(std::string nom)
 {
-    //char* fich[50];
-    //fich=nom.c_str();
-    nom=+".txt";
-    std::ofstream fichier(nom, std::ios::out | std::ios::trunc);
+    nom+=".txt";
+    std::ofstream fichier(nom, std::ios::trunc);
     if(fichier)
     {
         fichier << m_ordre << std::endl;
