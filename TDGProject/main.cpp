@@ -7,12 +7,13 @@ int main()
 {
     std::string nom;
 
-    grman::init();
     grman::set_pictures_path("foto");
-    std::cin >>nom;
+   std::cin >>nom;
+
+    grman::init();
     Graphe test;
     test.lecture(nom);
-    test.sauvegarde(nom);
+
 
     while ( !key[KEY_ESC] )
     {
@@ -21,7 +22,9 @@ int main()
     }
 
     grman::fermer_allegro();
-
+    std::cout <<" nom du fichier stp pour sauvegarder on ecrira fancais plus tard"<<std::endl;
+    std::cin >> nom;
+    test.sauvegarde(nom);
     return 0;
 }
 END_OF_MAIN();

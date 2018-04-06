@@ -1,11 +1,11 @@
 # depslib dependency file v1.0
-1522575069 source:d:\thiba\tdgproject\tdgproject\grman\coords.cpp
+1522982706 source:d:\thiba\tdgproject\tdgproject\grman\coords.cpp
 	"coords.h"
 
-1522575424 d:\thiba\tdgproject\tdgproject\grman\coords.h
+1522982706 d:\thiba\tdgproject\tdgproject\grman\coords.h
 	<cmath>
 
-1522515823 source:d:\thiba\tdgproject\tdgproject\grman\grman.cpp
+1522982706 source:d:\thiba\tdgproject\tdgproject\grman\grman.cpp
 	<cmath>
 	<unordered_map>
 	<unordered_set>
@@ -19,16 +19,16 @@
 	<loadpng.h>
 	<jpgalleg.h>
 
-1522539041 d:\thiba\tdgproject\tdgproject\grman\grman.h
+1522982706 d:\thiba\tdgproject\tdgproject\grman\grman.h
 	<allegro.h>
 	<string>
 	"grman_couleurs.h"
 	"coords.h"
 	"widget.h"
 
-1509222372 d:\thiba\tdgproject\tdgproject\grman\grman_couleurs.h
+1522982706 d:\thiba\tdgproject\tdgproject\grman\grman_couleurs.h
 
-1522979826 d:\thiba\tdgproject\tdgproject\grman\widget.h
+1523019484 d:\thiba\tdgproject\tdgproject\grman\widget.h
 	"grman.h"
 	<iostream>
 	<string>
@@ -36,15 +36,15 @@
 	<algorithm>
 	<allegro.h>
 
-1522979921 source:d:\thiba\tdgproject\tdgproject\grman\widget.cpp
+1523019490 source:d:\thiba\tdgproject\tdgproject\grman\widget.cpp
 	"widget.h"
 
-1522977480 source:d:\thiba\tdgproject\tdgproject\main.cpp
+1523020078 source:d:\thiba\tdgproject\tdgproject\main.cpp
 	"grman/grman.h"
 	<iostream>
 	"graphe.h"
 
-1522981015 d:\thiba\tdgproject\tdgproject\graphe.h
+1523019074 d:\thiba\tdgproject\tdgproject\graphe.h
 	<vector>
 	<map>
 	<string>
@@ -53,7 +53,7 @@
 	<iostream>
 	"grman/grman.h"
 
-1522976131 source:d:\thiba\tdgproject\tdgproject\graphe.cpp
+1523022596 source:d:\thiba\tdgproject\tdgproject\graphe.cpp
 	"graphe.h"
 
 1522937081 source:c:\users\pierre philbert\tdgproject\tdgproject\graphe.cpp
@@ -140,7 +140,7 @@
 
 1522928556 c:\users\hp\tdgproject\tdgproject\grman\grman_couleurs.h
 
-1522928556 c:\users\hp\tdgproject\tdgproject\grman\widget.h
+1523011467 c:\users\hp\tdgproject\tdgproject\grman\widget.h
 	"grman.h"
 	<iostream>
 	<string>
@@ -148,15 +148,15 @@
 	<algorithm>
 	<allegro.h>
 
-1522928556 source:c:\users\hp\tdgproject\tdgproject\grman\widget.cpp
+1523011467 source:c:\users\hp\tdgproject\tdgproject\grman\widget.cpp
 	"widget.h"
 
-1522947259 source:c:\users\hp\tdgproject\tdgproject\main.cpp
+1523017196 source:c:\users\hp\tdgproject\tdgproject\main.cpp
 	"grman/grman.h"
 	<iostream>
 	"graphe.h"
 
-1522947276 c:\users\hp\tdgproject\tdgproject\graphe.h
+1523010406 c:\users\hp\tdgproject\tdgproject\graphe.h
 	<vector>
 	<map>
 	<string>
@@ -165,6 +165,63 @@
 	<iostream>
 	"grman/grman.h"
 
-1522947290 source:c:\users\hp\tdgproject\tdgproject\graphe.cpp
+1523013709 source:c:\users\hp\tdgproject\tdgproject\graphe.cpp
+	"graphe.h"
+
+1522885698 source:c:\users\romain\tdgproject\tdgproject\grman\coords.cpp
+	"coords.h"
+
+1522885698 c:\users\romain\tdgproject\tdgproject\grman\coords.h
+	<cmath>
+
+1522885698 source:c:\users\romain\tdgproject\tdgproject\grman\grman.cpp
+	<cmath>
+	<unordered_map>
+	<unordered_set>
+	<utility>
+	<string>
+	<iostream>
+	<regex>
+	"grman.h"
+	<allegro.h>
+	<png.h>
+	<loadpng.h>
+	<jpgalleg.h>
+
+1522885698 c:\users\romain\tdgproject\tdgproject\grman\grman.h
+	<allegro.h>
+	<string>
+	"grman_couleurs.h"
+	"coords.h"
+	"widget.h"
+
+1522885698 c:\users\romain\tdgproject\tdgproject\grman\grman_couleurs.h
+
+1522885698 c:\users\romain\tdgproject\tdgproject\grman\widget.h
+	"grman.h"
+	<iostream>
+	<string>
+	<vector>
+	<algorithm>
+	<allegro.h>
+
+1522885698 source:c:\users\romain\tdgproject\tdgproject\grman\widget.cpp
+	"widget.h"
+
+1522982679 source:c:\users\romain\tdgproject\tdgproject\main.cpp
+	"grman/grman.h"
+	<iostream>
+	"graphe.h"
+
+1522988361 c:\users\romain\tdgproject\tdgproject\graphe.h
+	<vector>
+	<map>
+	<string>
+	<memory>
+	<fstream>
+	<iostream>
+	"grman/grman.h"
+
+1522988420 source:c:\users\romain\tdgproject\tdgproject\graphe.cpp
 	"graphe.h"
 
