@@ -41,6 +41,13 @@ SommetInterface::SommetInterface(int idx, int x, int y, std::string nom_foto, in
 
     m_bouton_delete.add_child(m_bouton_delete_label);
     m_bouton_delete_label.set_message("X");
+    //bouton pour relier deux sommets
+    m_top_box.add_child( m_bouton_link );
+    m_bouton_link.set_frame(114,23,16,16);
+    m_bouton_link.set_bg_color(JAUNE);
+
+    m_bouton_link.add_child(m_bouton_link_label);
+    m_bouton_link_label.set_message("+");
 }
 
 void Sommet::ajouter_var(double fertilite, double deces)
@@ -99,7 +106,7 @@ ArcInterface::ArcInterface(Sommet& from, Sommet& to)
     m_label_weight.set_gravity_y(grman::GravityY::Down);
 
     //Ajout u bouton supr
-     m_box_edge.add_child( m_bouton_delete );
+    m_box_edge.add_child( m_bouton_delete );
     m_bouton_delete.set_frame(6,50,16,16);
     m_bouton_delete.set_bg_color(ROUGE);
 
@@ -144,31 +151,31 @@ GrapheInterface::GrapheInterface(int x, int y, int w, int h)
     m_main_box.set_gravity_xy(grman::GravityX::Right, grman::GravityY::Up);
     m_main_box.set_bg_color(BLANCJAUNE);
     //Bouton ajout de sommet
-    m_tool_box.add_child(m_bouton_ajout_sommet);
-    m_bouton_ajout_sommet.set_frame(3,3,77,40);
-    m_bouton_ajout_sommet.set_bg_color(VERTCLAIR);
-    m_bouton_ajout_sommet.add_child(m_bouton_ajout_sommet_label);
-    m_bouton_ajout_sommet_label.set_message("Add");
+    m_tool_box.add_child(m_bouton_ajout_sommet1);
+    m_bouton_ajout_sommet1.set_frame(3,3,77,40);
+    m_bouton_ajout_sommet1.set_bg_color(VERTCLAIR);
+    m_bouton_ajout_sommet1.add_child(m_bouton_ajout_sommet1_label);
+    m_bouton_ajout_sommet1_label.set_message("Add s1");
     //Bouton ajout d une arete de type 1
-    m_tool_box.add_child(m_bouton_ajout_arete1);
-    m_bouton_ajout_arete1.set_frame(3,43,77,40);
-    m_bouton_ajout_arete1.set_bg_color(VERTCLAIR);
-    m_bouton_ajout_arete1.add_child(m_bouton_ajout_arete1_label);
-    m_bouton_ajout_arete1_label.set_message("Add");
+    m_tool_box.add_child(m_bouton_ajout_sommet2);
+    m_bouton_ajout_sommet2.set_frame(3,43,77,40);
+    m_bouton_ajout_sommet2.set_bg_color(VERTCLAIR);
+    m_bouton_ajout_sommet2.add_child(m_bouton_ajout_sommet2_label);
+    m_bouton_ajout_sommet2_label.set_message("Add s2");
     //Bouton pour une arte de type 2
-    m_tool_box.add_child(m_bouton_ajout_arete2);
-    m_bouton_ajout_arete2.set_frame(3,83,77,40);
-    m_bouton_ajout_arete2.set_bg_color(VERTCLAIR);
-    m_bouton_ajout_arete2.add_child(m_bouton_ajout_arete2_label);
-    m_bouton_ajout_arete2_label.set_message("Add");
+    m_tool_box.add_child(m_bouton_link);
+    m_bouton_link.set_frame(3,83,77,40);
+    m_bouton_link.set_bg_color(VERTCLAIR);
+    m_bouton_link.add_child(m_bouton_link_label);
+    m_bouton_link_label.set_message("link");
     // bouton pour load
-     m_tool_box.add_child(m_bouton_load);
+    m_tool_box.add_child(m_bouton_load);
     m_bouton_load.set_frame(3,123,77,40);
     m_bouton_load.set_bg_color(VERTCLAIR);
     m_bouton_load.add_child(m_bouton_load_label);
     m_bouton_load_label.set_message("Load");
     //bouton pour save
-     m_tool_box.add_child(m_bouton_save);
+    m_tool_box.add_child(m_bouton_save);
     m_bouton_save.set_frame(3,163,77,40);
     m_bouton_save.set_bg_color(VERTCLAIR);
     m_bouton_save.add_child(m_bouton_save_label);
@@ -191,6 +198,7 @@ void Graphe::lecture(std::string nom)
     std::string nom_foto;
     int nb_sommets;
     int nb_arretes;
+    m_link=0;
     std::ifstream fichier(nf);
     if(fichier)
     {
@@ -209,22 +217,22 @@ void Graphe::lecture(std::string nom)
             fichier >> fertilite;
             fichier >> deces;
             add_interfaced_sommet(idx,val,x,y,nom_foto);
-            std::cout << "recup sommet : " << i << std::endl;
+
         }
         for(int i=0; i< nb_arretes; i++)
         {
-            std::cout << "debut arrete " << i << std::endl;
+
             fichier >> idx;
-            std::cout << "recup idx" << std::endl;
+
             fichier >> x;
-            std::cout << "recup x" << std::endl;
+
             fichier >> y;
-            std::cout << "recup y" << std::endl;
+
             fichier >> val;
-            std::cout << "recup val" << std::endl;
+
 
             add_interfaced_arc(idx,x,y,val);
-            std::cout << "recup arc : " << i << std::endl;
+
         }
 
         // return tmp;
@@ -272,6 +280,11 @@ void Graphe::sauvegarde(std::string nom)
 
 void Graphe::update()
 {
+
+    int val_ind=0;
+    int b;
+    int som1,som2;
+
     if (!m_interface)
         return;
 //std::cout<<"test"<<std::endl;
@@ -293,22 +306,79 @@ void Graphe::update()
         //elt.second.post_update();
         elt.post_update();
 
-    for(int i=0;i<m_sommets.size();i++)
+
+    if(m_interface->m_bouton_ajout_sommet1.clicked()&&bol2!=1)
+    {
+        bol1=1;
+    }
+    if(m_interface->m_bouton_ajout_sommet2.clicked()&&bol1!=1)
+    {
+        bol2=1;
+    }
+    for(int i=0; i<m_sommets.size(); i++)
     {
         if(m_sommets[i].m_interface->m_bouton_delete.clicked())
         {
             suppression_sommet(m_sommets[i].m_index);
             m_ordre=m_ordre-1;
         }
+
+        if(m_sommets[i].m_interface->m_bouton_link.clicked())
+        {
+            std::cout << "fdp" << std::endl;
+            if(bol1==1)
+            {
+                som1=m_sommets[i].m_index;
+                std::cout << "sommet1" << std::endl;
+                bol1=0;
+            }
+            else if (bol2==1)
+            {
+                som2=m_sommets[i].m_index;
+                std::cout << "sommet2" << std::endl;
+                bol2=0;
+            }
+        }
+    }
+    if(m_interface->m_bouton_link.clicked())
+    {
+        if(som1!=som2)
+        {
+            b=0;
+            while (b==0)
+            {
+                for(int i=0; i<m_arcs.size(); i++ )
+                {
+                    if(val_ind==m_arcs[i].m_indx)
+                    {
+                        val_ind++;
+                    }
+                    else
+                    {
+                        b=1;
+                    }
+
+
+                }
+            }
+
+            add_interfaced_arc(val_ind,som1,som2);
+
+        }
+        else
+        {
+            std::cout << "C'est les memes sommets FDP !!!" << std::endl;
+        }
     }
 
-    for(int i=0;i<m_arcs.size();i++)
+    // supression des arcs
+    for(int i=0; i<m_arcs.size(); i++)
     {
         if(m_arcs[i].m_interface->m_bouton_delete.clicked())
         {
-             m_interface->m_main_box.remove_child(m_arcs[i].m_interface->m_top_edge);
-                m_arcs.erase(m_arcs.begin()+i);
-                m_nbarcs=m_nbarcs-1;
+            m_interface->m_main_box.remove_child(m_arcs[i].m_interface->m_top_edge);
+            m_arcs.erase(m_arcs.begin()+i);
+            m_nbarcs=m_nbarcs-1;
         }
     }
 
@@ -324,74 +394,75 @@ void Graphe::suppression_sommet(int indice)
     //supression de toutes les arretes relie au somet
 
     while(done2==0)
-    {   done2=1;
-        for(int i=0;i<m_arcs.size();i++)
+    {
+        done2=1;
+        for(int i=0; i<m_arcs.size(); i++)
         {
             if(m_arcs[i].m_from==indice ||m_arcs[i].m_to==indice )
             {
                 //on suprime l arete i
-             //   std::cout<<"bitocul  "<<m_arcs[i].m_to<<"   " << i<<std::endl;
+                //   std::cout<<"bitocul  "<<m_arcs[i].m_to<<"   " << i<<std::endl;
                 //suppression_arc(i);
                 done2=0;
-                 m_interface->m_main_box.remove_child(m_arcs[i].m_interface->m_top_edge);
+                m_interface->m_main_box.remove_child(m_arcs[i].m_interface->m_top_edge);
                 m_arcs.erase(m_arcs.begin()+i);
                 m_nbarcs=m_nbarcs-1;
             }
         }
     }
     //supression du sommet
-    for(int i=0;i<m_sommets.size();i++)
+    for(int i=0; i<m_sommets.size(); i++)
     {
         if(m_sommets[i].m_index==indice && done ==0)
         {
 
-          //  m_interface->m_top_box.remove_child(m_sommets[i].m_interface->m_top_box);
-          //  delete &m_sommets[i].m_interface->m_top_box;
+            //  m_interface->m_top_box.remove_child(m_sommets[i].m_interface->m_top_box);
+            //  delete &m_sommets[i].m_interface->m_top_box;
 //          delete m_sommets[i].m_interface;
- //pt = &m_sommets[i].m_interface.m_main_box;//copie
+//pt = &m_sommets[i].m_interface.m_main_box;//copie
             m_interface->m_main_box.remove_child(m_sommets[i].m_interface->m_top_box);//copie
-           // m_interface->m_main_box.remove_child(pt);
+            // m_interface->m_main_box.remove_child(pt);
             tmp=m_sommets[m_sommets.size()-1];
 
-           m_sommets[m_sommets.size()-1] = m_sommets[i];
-           m_sommets[i]=tmp;
+            m_sommets[m_sommets.size()-1] = m_sommets[i];
+            m_sommets[i]=tmp;
 
-           m_sommets.pop_back();
+            m_sommets.pop_back();
 
-           done =1;
+            done =1;
         }
     }
 
 
 
-   // std::cout<<"test"<<std::endl;
+    // std::cout<<"test"<<std::endl;
 }
 
 void Graphe::suppression_arc(int indice)
 {
     Arc tmp;
     int done=0;
-    for(int i=0;i<m_arcs.size();i++)
+    for(int i=0; i<m_arcs.size(); i++)
     {
         if(m_arcs[i].m_indx==indice && done ==0)
         {
 
             //m_interface->m_top_box.remove_child(m_arcs[i].m_interface->m_top_edge);
-           // delete &m_arcs[i].m_interface->m_top_edge;
+            // delete &m_arcs[i].m_interface->m_top_edge;
 //           delete m_arcs[i].m_interface;
 
             m_interface->m_main_box.remove_child(m_arcs[i].m_interface->m_top_edge);//copie
             //=m_arcs[m_arcs.size()-1];
 
-          // m_arcs[m_arcs.size()-1] = m_arcs[i];
-          // m_arcs[i]=tmp;
+            // m_arcs[m_arcs.size()-1] = m_arcs[i];
+            // m_arcs[i]=tmp;
 
-           //m_arcs.pop_back();
-           std::cout<< "l arete a ete suprimee indice:"<< i<<std::endl;
-           m_arcs.erase(m_arcs.begin()+i);
+            //m_arcs.pop_back();
+            std::cout<< "l arete a ete suprimee indice:"<< i<<std::endl;
+            m_arcs.erase(m_arcs.begin()+i);
 
 
-           done =1;
+            done =1;
         }
     }
 }
@@ -418,19 +489,9 @@ void Graphe::add_interfaced_sommet(int idx, double valeur, int x, int y, std::st
 
 void Graphe::add_interfaced_arc(int idx, int id_som1, int id_som2, double poids)
 {
-    /*if ( m_arcs.find(idx)!=m_arcs.end() )
-    {
-        std::cerr << "Error adding arc at idx=" << idx << " already used..." << std::endl;
-        throw "Error adding arc";
-    }
 
-    if ( m_sommets.find(id_som1)==m_sommets.end() || m_sommets.find(id_som2)==m_sommets.end() )
-    {
-        std::cerr << "Error adding arc idx=" << idx << " between sommets " << id_som1 << " and " << id_som2 << " not in m_sommets" << std::endl;
-        throw "Error adding arc";
-    }*/
     Sommet som1,som2;
-    for (int i=0;i<m_sommets.size();i++)
+    for (int i=0; i<m_sommets.size(); i++)
     {
         if(m_sommets[i].m_index==id_som1)
             som1=m_sommets[i];

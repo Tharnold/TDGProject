@@ -27,6 +27,8 @@ private:
     // grman::WidgetBox m_boite_boutons;
         grman::WidgetButton m_bouton_delete;
         grman::WidgetText m_bouton_delete_label;
+         grman::WidgetButton m_bouton_link;
+        grman::WidgetText m_bouton_link_label;
 
 public:
     SommetInterface(int idx, int x, int y, std::string nom_foto="", int foto_idx=0);
@@ -104,15 +106,15 @@ private:
     grman::WidgetBox m_top_box;
     grman::WidgetBox m_main_box;
     grman::WidgetBox m_tool_box;
-    //ajouter un sommet
-    grman::WidgetButton m_bouton_ajout_sommet;
-    grman::WidgetText m_bouton_ajout_sommet_label;
-    //ajouterune arete de type 1
-    grman::WidgetButton m_bouton_ajout_arete1;
-    grman::WidgetText m_bouton_ajout_arete1_label;
-    //ajouter un arete de type 2
-    grman::WidgetButton m_bouton_ajout_arete2;
-    grman::WidgetText m_bouton_ajout_arete2_label;
+    //ajouter un sommet1
+    grman::WidgetButton m_bouton_ajout_sommet1;
+    grman::WidgetText m_bouton_ajout_sommet1_label;
+    //ajouter un sommet2
+    grman::WidgetButton m_bouton_ajout_sommet2;
+    grman::WidgetText m_bouton_ajout_sommet2_label;
+    //linker les deux sommets
+    grman::WidgetButton m_bouton_link;
+    grman::WidgetText m_bouton_link_label;
     //Bouton pour charger
     grman::WidgetButton m_bouton_load;
     grman::WidgetText m_bouton_load_label;
@@ -134,6 +136,11 @@ private:
     std::vector<Sommet> m_sommets;
     int m_ordre,m_nbarcs;
     std::shared_ptr<GrapheInterface> m_interface = nullptr;
+    int m_link;
+    Sommet ss1;
+    Sommet ss2;
+    int bol1=0;
+    int bol2=0;
 
 public:
     Graphe (GrapheInterface *interface=nullptr,int ordre=0, int nbarcs=0) :
