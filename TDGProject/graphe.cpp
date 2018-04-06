@@ -283,6 +283,7 @@ void Graphe::update()
 
     int val_ind=0;
     int b;
+    std::string nom;
 
 
     if (!m_interface)
@@ -359,8 +360,28 @@ void Graphe::update()
     }
 
 
+    if (m_interface->m_bouton_save.clicked())
+    {
+        std::cout << "Dans quel fichier enregistrer votre graphe ?" << std::endl;
+        std::cin >> nom;
+        sauvegarde(nom);
+    }
 
+    if (m_interface->m_bouton_load.clicked())
+    {
+        std::cout << "Quel fichier voulez vous load ?" << std::endl;
+        std::cin >> nom;
 
+        while (m_arcs.size()>0)
+        {
+            m_arcs.pop_back();
+        }
+        while (m_sommets.size()>0)
+        {
+            m_sommets.pop_back();
+        }
+        lecture(nom);
+    }
 
 
 
