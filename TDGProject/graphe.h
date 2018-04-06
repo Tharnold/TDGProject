@@ -105,7 +105,7 @@ public:
 
 class Graphe
 {
-   // friend class GrapheInterface;
+   //friend class Widget;
 private:
     std::vector<Arc> m_arcs;
     std::vector<Sommet> m_sommets;

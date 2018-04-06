@@ -12,6 +12,7 @@ int main()
     std::cin >>nom;
     Graphe test;
     test.lecture(nom);
+    test.sauvegarde(nom);
 
     while ( !key[KEY_ESC] )
     {

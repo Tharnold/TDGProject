@@ -183,20 +183,35 @@ m_interface= std::make_shared<GrapheInterface>(50, 0, 750, 600);
     }
 }
 
-/*void Graphe::sauvegarde(std::string nom)
+void Graphe::sauvegarde(std::string nom)
 {
-    char* fich[50];
-    fich=nom.c_str();
-    std::ofstream fichier(fich, std::ios::out | std::ios::trunc);
+    //char* fich[50];
+    //fich=nom.c_str();
+    nom=+".txt";
+    std::ofstream fichier(nom, std::ios::out | std::ios::trunc);
     if(fichier)
     {
-
+        fichier << m_ordre << std::endl;
+        fichier << m_nbarcs << std::endl;
         for(auto &elt : m_sommets)
         {
-
+            fichier << elt.m_index << " ";
+            fichier << elt.m_valeur << " ";
+            fichier << elt.m_interface->m_top_box.get_frame_pos().x << " ";
+            fichier << elt.m_interface->m_top_box.get_frame_pos().y << " ";
+            fichier << elt.m_interface->m_img.get_pic_name() << " ";
+            fichier << elt.m_fertilite << " ";
+            fichier << elt.m_deces_mois << std::endl;
+        }
+        for(auto &elt : m_arcs)
+        {
+            fichier << elt.m_indx << " ";
+            fichier << elt.m_from << " ";
+            fichier << elt.m_to << " ";
+            fichier << elt.m_poids << std::endl;
         }
     }
-}*/
+}
 
 
 void Graphe::update()
@@ -257,5 +272,8 @@ void Graphe::add_interfaced_arc(int idx, int id_som1, int id_som2, double poids)
 
     ArcInterface *ei = new ArcInterface(m_sommets[id_som1], m_sommets[id_som2]);
     m_interface->m_main_box.add_child(ei->m_top_edge);
-    m_arcs.push_back(Arc(poids, ei, idx));
+    Arc larc(poids, ei, idx);
+    larc.m_from=id_som1;
+    larc.m_to=id_som2;
+    m_arcs.push_back(larc);
 }
