@@ -283,7 +283,7 @@ void Graphe::update()
 
     int val_ind=0;
     int b;
-    int som1,som2;
+
 
     if (!m_interface)
         return;
@@ -307,69 +307,62 @@ void Graphe::update()
         elt.post_update();
 
 
-    if(m_interface->m_bouton_ajout_sommet1.clicked()&&bol2!=1)
+    if(m_interface->m_bouton_ajout_sommet1.clicked()&&bol!=1)
     {
-        bol1=1;
+        bol=1;
     }
-    if(m_interface->m_bouton_ajout_sommet2.clicked()&&bol1!=1)
+    if(m_interface->m_bouton_ajout_sommet2.clicked()&&bol!=2)
     {
-        bol2=1;
+        bol=2;
     }
+
     for(int i=0; i<m_sommets.size(); i++)
     {
-        if(m_sommets[i].m_interface->m_bouton_delete.clicked())
-        {
-            suppression_sommet(m_sommets[i].m_index);
-            m_ordre=m_ordre-1;
-        }
 
+         if(m_sommets[i].m_interface->m_bouton_delete.clicked())
+         {
+             suppression_sommet(m_sommets[i].m_index);
+         }
         if(m_sommets[i].m_interface->m_bouton_link.clicked())
         {
-            std::cout << "fdp" << std::endl;
-            if(bol1==1)
+            switch(bol)
             {
-                som1=m_sommets[i].m_index;
-                std::cout << "sommet1" << std::endl;
-                bol1=0;
-            }
-            else if (bol2==1)
-            {
-                som2=m_sommets[i].m_index;
-                std::cout << "sommet2" << std::endl;
-                bol2=0;
+            case 1: ss1=m_sommets[i];
+                rest;
+            case 2: ss2=m_sommets[i];
+                rest;
             }
         }
     }
-    if(m_interface->m_bouton_link.clicked())
+
+    if(m_interface->m_bouton_link.clicked() && ss1.m_index!=ss2.m_index)
     {
-        if(som1!=som2)
-        {
-            b=0;
-            while (b==0)
-            {
-                for(int i=0; i<m_arcs.size(); i++ )
+         b=0;
+                while (b==0)
                 {
-                    if(val_ind==m_arcs[i].m_indx)
+                    for(int i=0; i<m_arcs.size(); i++ )
                     {
-                        val_ind++;
-                    }
-                    else
-                    {
-                        b=1;
-                    }
+                        if(val_ind==m_arcs[i].m_indx)
+                        {
+                            val_ind++;
+                        }
+                        else
+                        {
+                            b=1;
+                        }
 
 
+                    }
                 }
-            }
-
-            add_interfaced_arc(val_ind,som1,som2);
-
-        }
-        else
-        {
-            std::cout << "C'est les memes sommets FDP !!!" << std::endl;
-        }
+         add_interfaced_arc(val_ind,ss1.m_index,ss2.m_index);
+         m_nbarcs++;
     }
+
+
+
+
+
+
 
     // supression des arcs
     for(int i=0; i<m_arcs.size(); i++)
@@ -384,6 +377,7 @@ void Graphe::update()
 
 
 }
+
 void Graphe::suppression_sommet(int indice)
 {
     Sommet tmp;
@@ -406,7 +400,7 @@ void Graphe::suppression_sommet(int indice)
                 done2=0;
                 m_interface->m_main_box.remove_child(m_arcs[i].m_interface->m_top_edge);
                 m_arcs.erase(m_arcs.begin()+i);
-                m_nbarcs=m_nbarcs-1;
+                m_nbarcs--;
             }
         }
     }
@@ -416,18 +410,16 @@ void Graphe::suppression_sommet(int indice)
         if(m_sommets[i].m_index==indice && done ==0)
         {
 
-            //  m_interface->m_top_box.remove_child(m_sommets[i].m_interface->m_top_box);
-            //  delete &m_sommets[i].m_interface->m_top_box;
-//          delete m_sommets[i].m_interface;
-//pt = &m_sommets[i].m_interface.m_main_box;//copie
+
             m_interface->m_main_box.remove_child(m_sommets[i].m_interface->m_top_box);//copie
-            // m_interface->m_main_box.remove_child(pt);
+
             tmp=m_sommets[m_sommets.size()-1];
 
             m_sommets[m_sommets.size()-1] = m_sommets[i];
             m_sommets[i]=tmp;
 
             m_sommets.pop_back();
+            m_ordre--;
 
             done =1;
         }

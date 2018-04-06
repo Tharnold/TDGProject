@@ -139,8 +139,7 @@ private:
     int m_link;
     Sommet ss1;
     Sommet ss2;
-    int bol1=0;
-    int bol2=0;
+    int bol;
 
 public:
     Graphe (GrapheInterface *interface=nullptr,int ordre=0, int nbarcs=0) :
