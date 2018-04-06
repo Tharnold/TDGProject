@@ -211,7 +211,6 @@ void Graphe::sauvegarde(std::string nom)
     }
 }
 
-
 void Graphe::update()
 {
     if (!m_interface)
