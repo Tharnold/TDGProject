@@ -156,6 +156,9 @@ public:
         void update();
         void suppression_sommet(int indice);
         void suppression_arc(int indice);
+        std::vector<int> RechercheComposanteFortementConnexe(int s);
+        std::vector< std::vector<int> > TouteLesComposantesFortementsConnexes();
+
 
 };
 

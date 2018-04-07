@@ -1,4 +1,4 @@
-﻿#include "graphe.h"
+#include "graphe.h"
 
 SommetInterface::SommetInterface(int idx, int x, int y, std::string nom_foto, int foto_idx)
 {
@@ -283,7 +283,221 @@ void Graphe::sauvegarde(std::string nom)
     }
 }
 
+std::vector<int> Graphe::RechercheComposanteFortementConnexe(int s)
+{
+    //VARIABLES
+    std::vector< std::vector<int> > matrice_adjacence;
+    std::vector<int> tmp;
+    std::vector <int> c1;
+    std::vector <int> c2;
+    std::vector <int> c;
+    std::vector <int> jean;
+    std::vector <int> marques;
+    //int x;
+    int a,b;
+    //int y;
+    int ajoute =1;
+  //  int s;
+    int blind=0;
 
+    //RECUPERATION DU SOMMET DE REFERENCE
+
+    //INITIALISATION DE LA MATRICE D ADJACENCE
+    for(int j=0; j<m_ordre; j++)
+    {
+        tmp.push_back(0);
+    }
+    for(int i=0; i<m_ordre; i++)
+    {
+        matrice_adjacence.push_back(tmp);
+    }
+    //REMPLISSAGE DE LA MATRICE D ADJACENCE.
+    for(int i=0; i<m_arcs.size(); i++)
+    {
+        for(int j=0; j<m_sommets.size(); j++)
+        {
+            if(m_sommets[j].m_index==m_arcs[i].m_from)
+            {
+                a=j;
+            }
+        }
+        for(int t=0; t<m_sommets.size(); t++)
+        {
+            if(m_sommets[t].m_index==m_arcs[i].m_to)
+            {
+                b=t;
+            }
+        }
+        matrice_adjacence[a][b]=1;
+        //   matrice_adjacence[b][a]=1;
+    }
+
+    //INTIALISATIONS DES VECTEURS
+    for(int i=0; i<m_sommets.size(); i++)
+    {
+        c1.push_back(0);
+        c2.push_back(0);
+        c.push_back(0);
+        jean.push_back(0);
+        marques.push_back(0);
+    }
+    //LE SOMMET S DEVIENT CONNEXE
+    for(int i=0; i<m_ordre; i++)
+    {
+        if(m_sommets[i].m_index==s)
+        {
+            c1[i]=1;
+            c2[i]=1;
+        }
+    }
+
+
+    //RECHERCHE C1
+    while(ajoute==1)
+    {
+        ajoute=0;
+
+
+        for(int x=0; x<m_ordre; x++)
+        {
+            if(marques[x]==0 && c1[x]==1)
+            {
+                marques[x]=1;
+                for(int y=0; y<m_ordre; y++)
+                {
+                    if(matrice_adjacence[x][y]==1 && marques[y]==0)
+                    {
+                        c1[y]=1;
+                        ajoute=1;
+                    }
+                }
+            }
+        }
+    }
+    //RECHERCHE C2
+    for(int i=0; i<m_ordre; i++)
+    {
+        //RESET DE MARQUES et jean
+
+        for(int t=0; t<m_ordre; t++)
+        {
+            marques[t]=0;
+            jean[t]=0;
+        }
+         //LE SOMMET S DEVIENT CONNEXE
+    for(int t=0; t<m_ordre; t++)
+    {
+        if(m_sommets[t].m_index==m_sommets[i].m_index)
+        {
+            jean[t]=1;
+        }
+    }
+        //REBAIL PTDRLOLXD
+        ajoute=1;
+        while(ajoute==1)
+        {
+            ajoute=0;
+
+
+            for(int x=0; x<m_ordre; x++)
+            {
+                if(marques[x]==0 && jean[x]==1)
+                {
+                    marques[x]=1;
+                    for(int y=0; y<m_ordre; y++)
+                    {
+                        if(matrice_adjacence[x][y]==1 && marques[y]==0)
+                        {
+                            jean[y]=1;
+                            ajoute=1;
+                        }
+                    }
+                }
+            }
+        }
+        //REGARDER SI CE TRUC PEUT ALLER A S
+        for(int g=0; g<m_ordre; g++)  //PARCOURS DE TMP
+        {
+            if(m_sommets[g].m_index==s)
+            {
+                if(jean[g]==1)
+                {
+                    c2[i]=1;
+                }
+            }
+        }
+
+    }
+    //CREATION DE LA COMPOSANTE FORTEMENT CONNEXE
+    for(int i=0; i<m_ordre; i++)
+    {
+        c[i]=c1[i]&c2[i];
+    }
+
+
+    return c;
+}
+std::vector< std::vector<int> > Graphe::TouteLesComposantesFortementsConnexes()
+{
+     std::vector< std::vector<int> > matrice_adjacence;
+      std::vector< std::vector<int> > tabc;
+       std::vector<int> marques;
+       std::vector<int> tmp;
+       int a,b;
+      //INITIALISATION DE LA MATRICE D ADJACENCE + TABC + MARQUES
+    for(int j=0; j<m_ordre; j++)
+    {
+        tmp.push_back(0);
+        marques.push_back(0);
+    }
+    for(int i=0; i<m_ordre; i++)
+    {
+        matrice_adjacence.push_back(tmp);
+        tabc.push_back(tmp);
+    }
+    //REMPLISSAGE DE LA MATRICE D ADJACENCE.
+    for(int i=0; i<m_arcs.size(); i++)
+    {
+        for(int j=0; j<m_sommets.size(); j++)
+        {
+            if(m_sommets[j].m_index==m_arcs[i].m_from)
+            {
+                a=j;
+            }
+        }
+        for(int t=0; t<m_sommets.size(); t++)
+        {
+            if(m_sommets[t].m_index==m_arcs[i].m_to)
+            {
+                b=t;
+            }
+        }
+        matrice_adjacence[a][b]=1;
+        //   matrice_adjacence[b][a]=1;
+    }
+    for(int x=0;x<m_ordre;x++)
+    {
+        if(marques[x]==0)
+        {
+            tabc[x]=RechercheComposanteFortementConnexe(m_sommets[x].m_index);
+            marques[x]=1;
+            for(int y=0;y<m_ordre;y++)
+            {
+                if(tabc[x][y]==1 && marques[y]==0)
+                {
+                    marques[y]=1;
+                }
+            }
+        }
+    }
+     for(int x=0;x<m_ordre;x++)
+     {
+         std::cout<<m_sommets[x].m_index<<" ";
+     }
+     std::cout<<std::endl;
+    return tabc;
+
+}
 void Graphe::update()
 {
 
@@ -329,17 +543,19 @@ void Graphe::update()
     for(int i=0; i<m_sommets.size(); i++)
     {
 
-         if(m_sommets[i].m_interface->m_bouton_delete.clicked())
-         {
-             suppression_sommet(m_sommets[i].m_index);
-         }
+        if(m_sommets[i].m_interface->m_bouton_delete.clicked())
+        {
+            suppression_sommet(m_sommets[i].m_index);
+        }
         if(m_sommets[i].m_interface->m_bouton_link.clicked())
         {
             switch(bol)
             {
-            case 1: ss1=m_sommets[i];
+            case 1:
+                ss1=m_sommets[i];
                 rest;
-            case 2: ss2=m_sommets[i];
+            case 2:
+                ss2=m_sommets[i];
                 rest;
             }
         }
@@ -347,25 +563,25 @@ void Graphe::update()
 
     if(m_interface->m_bouton_link.clicked() && ss1.m_index!=ss2.m_index)
     {
-         b=0;
-                while (b==0)
+        b=0;
+        while (b==0)
+        {
+            for(int i=0; i<m_arcs.size(); i++ )
+            {
+                if(val_ind==m_arcs[i].m_indx)
                 {
-                    for(int i=0; i<m_arcs.size(); i++ )
-                    {
-                        if(val_ind==m_arcs[i].m_indx)
-                        {
-                            val_ind++;
-                        }
-                        else
-                        {
-                            b=1;
-                        }
-
-
-                    }
+                    val_ind++;
                 }
-         add_interfaced_arc(val_ind,ss1.m_index,ss2.m_index);
-         m_nbarcs++;
+                else
+                {
+                    b=1;
+                }
+
+
+            }
+        }
+        add_interfaced_arc(val_ind,ss1.m_index,ss2.m_index);
+        m_nbarcs++;
     }
 
 
@@ -396,6 +612,7 @@ void Graphe::update()
         std::cout << std::endl << "----------AJJOUT SOMMET----------" << std::endl << std::endl;
         std::cout << "Quel animal ou fruit voulez vous ?  ";
         std::cin >> nom;
+        nom+=".png";
         std::cout << "Combien en faut-il ?  ";
         std::cin >> population;
         std::cout << "Quelle fertilité pour l'espece ? (double)  ";
