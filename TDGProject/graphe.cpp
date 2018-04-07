@@ -150,33 +150,39 @@ GrapheInterface::GrapheInterface(int x, int y, int w, int h)
     m_main_box.set_dim(908,720);
     m_main_box.set_gravity_xy(grman::GravityX::Right, grman::GravityY::Up);
     m_main_box.set_bg_color(BLANCJAUNE);
-    //Bouton ajout de sommet
+    //Bouton ajout de sommet1
     m_tool_box.add_child(m_bouton_ajout_sommet1);
     m_bouton_ajout_sommet1.set_frame(3,3,77,40);
     m_bouton_ajout_sommet1.set_bg_color(VERTCLAIR);
     m_bouton_ajout_sommet1.add_child(m_bouton_ajout_sommet1_label);
     m_bouton_ajout_sommet1_label.set_message("Add s1");
-    //Bouton ajout d une arete de type 1
+    //Bouton ajout de sommeet 2
     m_tool_box.add_child(m_bouton_ajout_sommet2);
     m_bouton_ajout_sommet2.set_frame(3,43,77,40);
     m_bouton_ajout_sommet2.set_bg_color(VERTCLAIR);
     m_bouton_ajout_sommet2.add_child(m_bouton_ajout_sommet2_label);
     m_bouton_ajout_sommet2_label.set_message("Add s2");
-    //Bouton pour une arte de type 2
+    //Bouton link des deux sommets
     m_tool_box.add_child(m_bouton_link);
     m_bouton_link.set_frame(3,83,77,40);
     m_bouton_link.set_bg_color(VERTCLAIR);
     m_bouton_link.add_child(m_bouton_link_label);
     m_bouton_link_label.set_message("link");
+    //bouton pour ajouter un sommet
+    m_tool_box.add_child(m_ajouter_sommet);
+    m_ajouter_sommet.set_frame(3,123,77,40);
+    m_ajouter_sommet.set_bg_color(VERTCLAIR);
+    m_ajouter_sommet.add_child(m_ajouter_sommet_label);
+    m_ajouter_sommet_label.set_message("+ sommet");
     // bouton pour load
     m_tool_box.add_child(m_bouton_load);
-    m_bouton_load.set_frame(3,123,77,40);
+    m_bouton_load.set_frame(3,163,77,40);
     m_bouton_load.set_bg_color(VERTCLAIR);
     m_bouton_load.add_child(m_bouton_load_label);
     m_bouton_load_label.set_message("Load");
     //bouton pour save
     m_tool_box.add_child(m_bouton_save);
-    m_bouton_save.set_frame(3,163,77,40);
+    m_bouton_save.set_frame(3,203,77,40);
     m_bouton_save.set_bg_color(VERTCLAIR);
     m_bouton_save.add_child(m_bouton_save_label);
     m_bouton_save_label.set_message("Save");
@@ -284,6 +290,9 @@ void Graphe::update()
     int val_ind=0;
     int b;
     std::string nom;
+    double fertilite;
+    double deces;
+    int population;
 
 
     if (!m_interface)
@@ -382,6 +391,37 @@ void Graphe::update()
         }
         lecture(nom);
     }
+    if(m_interface->m_ajouter_sommet.clicked())
+    {
+        std::cout << std::endl << "----------AJJOUT SOMMET----------" << std::endl << std::endl;
+        std::cout << "Quel animal ou fruit voulez vous ?  ";
+        std::cin >> nom;
+        std::cout << "Combien en faut-il ?  ";
+        std::cin >> population;
+        std::cout << "Quelle fertilité pour l'espece ? (double)  ";
+        std::cin >> fertilite;
+        std::cout << "Quelle mortalité naturelle ? (double)  ";
+        std::cin >> deces;
+
+        b=0;
+        while (b==0)
+        {
+            for(int i=0; i<m_sommets.size(); i++ )
+            {
+                if(val_ind==m_sommets[i].m_index)
+                {
+                    val_ind++;
+                }
+                else
+                {
+                    b=1;
+                }
+            }
+        }
+        add_interfaced_sommet(val_ind,population,300,300,nom,fertilite,deces);
+        m_ordre++;
+    }
+
 
 
 

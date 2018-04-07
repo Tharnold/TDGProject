@@ -115,6 +115,9 @@ private:
     //linker les deux sommets
     grman::WidgetButton m_bouton_link;
     grman::WidgetText m_bouton_link_label;
+    //Bouton ajouter un sommet
+    grman::WidgetButton m_ajouter_sommet;
+    grman::WidgetText m_ajouter_sommet_label;
     //Bouton pour charger
     grman::WidgetButton m_bouton_load;
     grman::WidgetText m_bouton_load_label;
