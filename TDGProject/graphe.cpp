@@ -316,16 +316,25 @@ void Graphe::sauvegarde(std::string nom)
 
 void Graphe::simulation()
 {
+    //POPULATION PENDANT LA MISE A JOUR
     double popu=0;
+    //NOMBRE D'INDIVIDUS MORTS DE PREDATEURS
     double eaten=0;
+    //NOMBRE DE RESSOURCES
     double eat=0;
     int som=0;
     int rarc=0;
     double pds=0;
+
+    //PARCOURS DE TOUS LES SOMMETS POUR LEUR MISE A JOUR
     for (int i=0; i<m_sommets.size(); i++)
     {
+        //CALCUL DE LA POPULATION AU TEMPS T+1
         popu=m_sommets[i].m_valeur;
         popu+=m_sommets[i].m_valeur*(m_sommets[i].m_fertilite-m_sommets[i].m_deces_mois);
+
+        ///RECUPERATION DES ARCS INCIDENTS POUR AVOIR LA QUANTITE DE PREDATEURS ET DE PROIES
+        //RECUPERATION DES PREDATEURS
         for(int j=0; j<m_sommets[i].m_in.size(); j++)
         {
             for(int k=0; k<m_sommets.size(); k++)
@@ -342,6 +351,7 @@ void Graphe::simulation()
             eaten+=pds*m_sommets[som].m_valeur;
         }
 
+        //RECUPERATION DES PROIES(RESSOURCES)
         for(int j=0; j<m_sommets[i].m_out.size(); j++)
         {
             for(int k=0; k<m_sommets.size(); k++)
@@ -357,7 +367,9 @@ void Graphe::simulation()
             }
             eat+=pds*m_sommets[som].m_valeur;
         }
+
         popu-=eaten;
+        //VERIFICATION DES MORTS PAR MANQUE DE NOURRITURE
         popu=ressources(popu,eat);
         if(popu<0)
             popu=0;
@@ -366,6 +378,7 @@ void Graphe::simulation()
     }
 }
 
+//VERIFICATION SI LES RESSOURCES SONT SUFFISANTES
 double Graphe::ressources(double base,double ress)
 {
     if(base>ress)
