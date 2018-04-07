@@ -210,6 +210,12 @@ GrapheInterface::GrapheInterface(int x, int y, int w, int h)
     m_bouton_save.set_bg_color(0xB7CA79);
     m_bouton_save.add_child(m_bouton_save_label);
     m_bouton_save_label.set_message("Save");
+    //bouton pour la forte connextite
+     m_tool_box.add_child(m_bouton_forteco);
+    m_bouton_forteco.set_frame(3,323,77,40);
+    m_bouton_forteco.set_bg_color(0xB7CA79);
+    m_bouton_forteco.add_child(m_bouton_forteco_label);
+    m_bouton_forteco_label.set_message("elt.cnx");
 
 
 }
@@ -382,7 +388,7 @@ std::vector<int> Graphe::RechercheComposanteFortementConnexe(int s)
     int a,b;
     //int y;
     int ajoute =1;
-  //  int s;
+    //  int s;
     int blind=0;
 
     //RECUPERATION DU SOMMET DE REFERENCE
@@ -469,14 +475,14 @@ std::vector<int> Graphe::RechercheComposanteFortementConnexe(int s)
             marques[t]=0;
             jean[t]=0;
         }
-         //LE SOMMET S DEVIENT CONNEXE
-    for(int t=0; t<m_ordre; t++)
-    {
-        if(m_sommets[t].m_index==m_sommets[i].m_index)
+        //LE SOMMET S DEVIENT CONNEXE
+        for(int t=0; t<m_ordre; t++)
         {
-            jean[t]=1;
+            if(m_sommets[t].m_index==m_sommets[i].m_index)
+            {
+                jean[t]=1;
+            }
         }
-    }
         //REBAIL PTDRLOLXD
         ajoute=1;
         while(ajoute==1)
@@ -525,12 +531,12 @@ std::vector<int> Graphe::RechercheComposanteFortementConnexe(int s)
 
 std::vector< std::vector<int> > Graphe::TouteLesComposantesFortementsConnexes()
 {
-     std::vector< std::vector<int> > matrice_adjacence;
-      std::vector< std::vector<int> > tabc;
-       std::vector<int> marques;
-       std::vector<int> tmp;
-       int a,b;
-      //INITIALISATION DE LA MATRICE D ADJACENCE + TABC + MARQUES
+    std::vector< std::vector<int> > matrice_adjacence;
+    std::vector< std::vector<int> > tabc;
+    std::vector<int> marques;
+    std::vector<int> tmp;
+    int a,b;
+    //INITIALISATION DE LA MATRICE D ADJACENCE + TABC + MARQUES
     for(int j=0; j<m_ordre; j++)
     {
         tmp.push_back(0);
@@ -561,13 +567,13 @@ std::vector< std::vector<int> > Graphe::TouteLesComposantesFortementsConnexes()
         matrice_adjacence[a][b]=1;
         //   matrice_adjacence[b][a]=1;
     }
-    for(int x=0;x<m_ordre;x++)
+    for(int x=0; x<m_ordre; x++)
     {
         if(marques[x]==0)
         {
             tabc[x]=RechercheComposanteFortementConnexe(m_sommets[x].m_index);
             marques[x]=1;
-            for(int y=0;y<m_ordre;y++)
+            for(int y=0; y<m_ordre; y++)
             {
                 if(tabc[x][y]==1 && marques[y]==0)
                 {
@@ -576,11 +582,11 @@ std::vector< std::vector<int> > Graphe::TouteLesComposantesFortementsConnexes()
             }
         }
     }
-     for(int x=0;x<m_ordre;x++)
-     {
-         std::cout<<m_sommets[x].m_index<<" ";
-     }
-     std::cout<<std::endl;
+    for(int x=0; x<m_ordre; x++)
+    {
+        std::cout<<m_sommets[x].m_index<<" ";
+    }
+    std::cout<<std::endl;
     return tabc;
 
 }
@@ -616,7 +622,10 @@ void Graphe::update()
         //elt.second.post_update();
         elt.post_update();
 
-
+    if(m_interface->m_bouton_forteco.clicked())
+    {
+        surbrillance(TouteLesComposantesFortementsConnexes());
+    }
     if(m_interface->m_bouton_ajout_sommet1.clicked()&&bol!=1)
     {
         bol=1;
@@ -881,6 +890,7 @@ void Graphe::surbrillance(std::vector<std::vector<int>> tabc)
     std::vector <int> idxe;//cotient les indice des sommets appartenant a uen composante fortement connexe
     std::vector<int> colou;
     int cola=0;
+    int mf,mt;
     colou.push_back(ROUGE);
     colou.push_back(ROSE);
     colou.push_back(VIOLET);
@@ -891,55 +901,45 @@ void Graphe::surbrillance(std::vector<std::vector<int>> tabc)
     colou.push_back(ORANGE);
     colou.push_back(JAUNE);
     colou.push_back(NOIR);
-    colou.push_back(VERTSOMBRE);
-
+    colou.push_back(VERTFLUOSOMBRE);
     for(int i=0;i<tabc.size();i++)
     {
         for(int j=0;j<tabc[i].size();j++)
         {
-            if(tabc[i][j]==1 && tabc[i][j+1]==1)
+            if(tabc[i][j]==1)
             {
-                rep.push_back(i);
+                m_sommets[j].m_cfc=i;
             }
         }
     }
-    //breh breh
-    for(int i=0;i<rep.size();i++)
+
+    //LA NORMALEMENT C BON CHAQUE SOMMET A UNE COULEUR L ASSOCIANT A UE COMPOSANTE FORTEMENT CONNEXE
+    for(int i=0;i<m_arcs.size();i++)
     {
-        //FOUTRE UN RESERT DE IDXE§!!!!!!!
-       for(int j=0;j<tabc[rep[i]].size();j++)
-       {
-           if(tabc[rep[i]][j]==1)
-           {
-               idxe.push_back(m_sommets[j].m_index);
-           }
-       }
-       //PARCOURS DES ARRETES
-       for(int a=0;a<m_arcs.size();a++)
-       {
-           //parcours des from
-           for(int f=0;f<idxe.size();f++)
-           {
-               if(m_arcs[a].m_from==idxe[f])
-               {
-                   //parcours des to
-                   for(int t=0;t<idxe.size();t++)
-                   {
-                       if(m_arcs[a].m_to==idxe[t])
-                       {
+        //boucle pour choper from
+        for(int f=0;f<m_sommets.size();f++)
+        {
+            if(m_sommets[f].m_index==m_arcs[i].m_from)
+            {
+                mf=m_sommets[f].m_cfc;
+                std::cout<<mf<<" ";
 
-                           m_arcs[a].m_interface->m_top_edge.set_color(colou[cola]);
+            }
+        }
 
-                       }
-                       //cola++;
-                   }
+        //boucle pour choper to
+        for(int f=0;f<m_sommets.size();f++)
+        {
+            if(m_sommets[f].m_index==m_arcs[i].m_to)
+            {
+                mt=m_sommets[f].m_cfc;
+                std::cout<<mt<<" ";
+            }
+        }
+        if(mf==mt)
+        {
+            m_arcs[i].m_interface->m_top_edge.set_color(colou[mf]);
 
-
-               }
-
-           }
-
-
-       }
+        }
     }
 }

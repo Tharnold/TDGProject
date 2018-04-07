@@ -49,6 +49,7 @@ private:
     double m_valeur,m_fertilite,m_deces_mois;
     int m_index;
     std::shared_ptr<SommetInterface> m_interface = nullptr;
+        int m_cfc;//pour les composantes fortement connexe
 
 public:
     Sommet(double valeur=0, SommetInterface *interface=nullptr, int idx=0) :
@@ -131,6 +132,9 @@ private:
     //Bouton pour sauvegarder
     grman::WidgetButton m_bouton_save;
     grman::WidgetText m_bouton_save_label;
+     //Bouton pour surbrillance pour les elements fortements connexe
+    grman::WidgetButton m_bouton_forteco;
+    grman::WidgetText m_bouton_forteco_label;
 
 
 public:
@@ -151,6 +155,7 @@ private:
     Sommet ss2;
     int bol;
     int simu=0;
+
 
 public:
     Graphe (GrapheInterface *interface=nullptr,int ordre=0, int nbarcs=0) :
