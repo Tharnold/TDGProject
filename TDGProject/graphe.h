@@ -24,11 +24,10 @@ private:
     grman::WidgetImage m_img;
     grman::WidgetText m_label_idx;
     grman::WidgetText m_box_label_idx;
-    // grman::WidgetBox m_boite_boutons;
-        grman::WidgetButton m_bouton_delete;
-        grman::WidgetText m_bouton_delete_label;
-         grman::WidgetButton m_bouton_link;
-        grman::WidgetText m_bouton_link_label;
+    grman::WidgetButton m_bouton_delete;
+    grman::WidgetText m_bouton_delete_label;
+    grman::WidgetButton m_bouton_link;
+    grman::WidgetText m_bouton_link_label;
 
 public:
     SommetInterface(int idx, int x, int y, std::string nom_foto="", int foto_idx=0);
@@ -164,7 +163,7 @@ public:
         void suppression_sommet(int indice);
         void suppression_arc(int indice);
         void simulation();
-        int ressources(int base,int ress);
+        double ressources(double base,double ress);
 
 };
 

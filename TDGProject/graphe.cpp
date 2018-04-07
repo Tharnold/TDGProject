@@ -11,7 +11,7 @@ SommetInterface::SommetInterface(int idx, int x, int y, std::string nom_foto, in
 
     // Le slider de r�glage de valeur
     m_top_box.add_child( m_slider_value );
-    m_slider_value.set_range(0.0, 100.0);  // Valeurs arbitraires, � adapter...
+    m_slider_value.set_range(0.0, 1.0);  // Valeurs arbitraires, � adapter...
     m_slider_value.set_dim(20,80);
     m_slider_value.set_gravity_xy(grman::GravityX::Left, grman::GravityY::Up);
 
@@ -64,10 +64,10 @@ void Sommet::pre_update()
         return;
 
     /// Copier la valeur locale de la donn�e m_value vers le slider associ�
-    m_interface->m_slider_value.set_value(m_valeur);
+    m_interface->m_slider_value.set_value(m_fertilite);
 
     /// Copier la valeur locale de la donn�e m_value vers le label sous le slider
-    m_interface->m_label_value.set_message( std::to_string( (int)m_valeur) );
+    m_interface->m_label_value.set_message( std::to_string( (int)m_fertilite) );
 }
 
 
@@ -77,7 +77,7 @@ void Sommet::post_update()
         return;
 
     /// Reprendre la valeur du slider dans la donn�e m_value locale
-    m_valeur = m_interface->m_slider_value.get_value();
+    m_fertilite = m_interface->m_slider_value.get_value();
 }
 
 ArcInterface::ArcInterface(Sommet& from, Sommet& to)
@@ -99,7 +99,7 @@ ArcInterface::ArcInterface(Sommet& from, Sommet& to)
 
     // Le slider de r�glage de valeur
     m_box_edge.add_child( m_slider_weight );
-    m_slider_weight.set_range(0.0, 1.0);  // Valeurs arbitraires, � adapter...
+    m_slider_weight.set_range(0.0, 100.0);  // Valeurs arbitraires, � adapter...
     m_slider_weight.set_dim(16,40);
     m_slider_weight.set_gravity_y(grman::GravityY::Up);
 
@@ -126,7 +126,7 @@ void Arc::pre_update()
     m_interface->m_slider_weight.set_value(m_poids);
 
     /// Copier la valeur locale de la donn�e m_weight vers le label sous le slider
-    m_interface->m_label_weight.set_message( std::to_string( (int)m_poids ) );
+    m_interface->m_label_weight.set_message( std::to_string( (double)m_poids ) );
 }
 
 void Arc::post_update()
@@ -301,8 +301,8 @@ void Graphe::sauvegarde(std::string nom)
 void Graphe::simulation()
 {
     double popu=0;
-    int eaten=0;
-    int eat=0;
+    double eaten=0;
+    double eat=0;
     int som=0;
     int rarc=0;
     double pds=0;
@@ -343,12 +343,14 @@ void Graphe::simulation()
         }
         popu-=eaten;
         popu=ressources(popu,eat);
+        if(popu<0)
+            popu=0;
         m_sommets[i].m_valeur=popu;
-        std::cout << "popu : " << popu << std::endl;
+        std::cout << "popu : " << popu << " /   i :   " << i << std::endl;
     }
 }
 
-int Graphe::ressources(int base,int ress)
+double Graphe::ressources(double base,double ress)
 {
     if(base>ress)
         return base-(base-ress)*0.75;
