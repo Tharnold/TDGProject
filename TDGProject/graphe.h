@@ -69,8 +69,8 @@ private:
     grman::WidgetBox m_box_edge;
     grman::WidgetVSlider m_slider_weight;
     grman::WidgetText m_label_weight;
-     grman::WidgetButton m_bouton_delete;
-        grman::WidgetText m_bouton_delete_label;
+    grman::WidgetButton m_bouton_delete;
+    grman::WidgetText m_bouton_delete_label;
 
 public:
     ArcInterface(Sommet& from, Sommet& to);
@@ -118,6 +118,12 @@ private:
     //Bouton ajouter un sommet
     grman::WidgetButton m_ajouter_sommet;
     grman::WidgetText m_ajouter_sommet_label;
+    //Bouton Play
+    grman::WidgetButton m_lancer_simulation;
+    grman::WidgetText m_lancer_simulation_label;
+    //Bouton Pause
+    grman::WidgetButton m_pause_simulation;
+    grman::WidgetText m_pause_simulation_label;
     //Bouton pour charger
     grman::WidgetButton m_bouton_load;
     grman::WidgetText m_bouton_load_label;
@@ -143,6 +149,7 @@ private:
     Sommet ss1;
     Sommet ss2;
     int bol;
+    int simu=0;
 
 public:
     Graphe (GrapheInterface *interface=nullptr,int ordre=0, int nbarcs=0) :
@@ -156,6 +163,8 @@ public:
         void update();
         void suppression_sommet(int indice);
         void suppression_arc(int indice);
+        void simulation();
+        int ressources(int base,int ress);
 
 };
 

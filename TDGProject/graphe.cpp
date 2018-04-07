@@ -174,15 +174,27 @@ GrapheInterface::GrapheInterface(int x, int y, int w, int h)
     m_ajouter_sommet.set_bg_color(VERTCLAIR);
     m_ajouter_sommet.add_child(m_ajouter_sommet_label);
     m_ajouter_sommet_label.set_message("+ sommet");
+    //bouton pour lancer la simulation
+    m_tool_box.add_child(m_lancer_simulation);
+    m_lancer_simulation.set_frame(3,163,77,40);
+    m_lancer_simulation.set_bg_color(VERTCLAIR);
+    m_lancer_simulation.add_child(m_lancer_simulation_label);
+    m_lancer_simulation_label.set_message("Play");
+    //bouton pour pauser la simulation
+    m_tool_box.add_child(m_pause_simulation);
+    m_pause_simulation.set_frame(3,203,77,40);
+    m_pause_simulation.set_bg_color(VERTCLAIR);
+    m_pause_simulation.add_child(m_pause_simulation_label);
+    m_pause_simulation_label.set_message("Pause");
     // bouton pour load
     m_tool_box.add_child(m_bouton_load);
-    m_bouton_load.set_frame(3,163,77,40);
+    m_bouton_load.set_frame(3,243,77,40);
     m_bouton_load.set_bg_color(VERTCLAIR);
     m_bouton_load.add_child(m_bouton_load_label);
     m_bouton_load_label.set_message("Load");
     //bouton pour save
     m_tool_box.add_child(m_bouton_save);
-    m_bouton_save.set_frame(3,203,77,40);
+    m_bouton_save.set_frame(3,283,77,40);
     m_bouton_save.set_bg_color(VERTCLAIR);
     m_bouton_save.add_child(m_bouton_save_label);
     m_bouton_save_label.set_message("Save");
@@ -283,6 +295,64 @@ void Graphe::sauvegarde(std::string nom)
     }
 }
 
+void Graphe::simulation()
+{
+    double popu=0;
+    int eaten=0;
+    int eat=0;
+    int som=0;
+    int rarc=0;
+    double pds=0;
+    for (int i=0; i<m_sommets.size(); i++)
+    {
+        popu=m_sommets[i].m_valeur;
+        popu+=m_sommets[i].m_valeur*(m_sommets[i].m_fertilite-m_sommets[i].m_deces_mois);
+        for(int j=0; j<m_sommets[i].m_in.size(); j++)
+        {
+            for(int k=0; k<m_sommets.size(); k++)
+            {
+                for(int l=0; l<m_arcs.size(); l++)
+                {
+                    if(m_arcs[l].m_indx==j)
+                        rarc=m_arcs[l].m_from;
+                    pds=m_arcs[l].m_poids;
+                }
+                if(m_sommets[k].m_index==rarc)
+                    som=k;
+            }
+            eaten+=pds*m_sommets[som].m_valeur;
+        }
+
+        for(int j=0; j<m_sommets[i].m_out.size(); j++)
+        {
+            for(int k=0; k<m_sommets.size(); k++)
+            {
+                for(int l=0; l<m_arcs.size(); l++)
+                {
+                    if(m_arcs[l].m_indx==j)
+                        rarc=m_arcs[l].m_to;
+                    pds=m_arcs[l].m_poids;
+                }
+                if(m_sommets[k].m_index==rarc)
+                    som=k;
+            }
+            eat+=pds*m_sommets[som].m_valeur;
+        }
+        popu-=eaten;
+        popu=ressources(popu,eat);
+        m_sommets[i].m_valeur=popu;
+        std::cout << "popu : " << popu << std::endl;
+    }
+}
+
+int Graphe::ressources(int base,int ress)
+{
+    if(base>ress)
+        return base-(base-ress)*0.75;
+    else
+        return base;
+}
+
 
 void Graphe::update()
 {
@@ -329,17 +399,19 @@ void Graphe::update()
     for(int i=0; i<m_sommets.size(); i++)
     {
 
-         if(m_sommets[i].m_interface->m_bouton_delete.clicked())
-         {
-             suppression_sommet(m_sommets[i].m_index);
-         }
+        if(m_sommets[i].m_interface->m_bouton_delete.clicked())
+        {
+            suppression_sommet(m_sommets[i].m_index);
+        }
         if(m_sommets[i].m_interface->m_bouton_link.clicked())
         {
             switch(bol)
             {
-            case 1: ss1=m_sommets[i];
+            case 1:
+                ss1=m_sommets[i];
                 rest;
-            case 2: ss2=m_sommets[i];
+            case 2:
+                ss2=m_sommets[i];
                 rest;
             }
         }
@@ -347,25 +419,25 @@ void Graphe::update()
 
     if(m_interface->m_bouton_link.clicked() && ss1.m_index!=ss2.m_index)
     {
-         b=0;
-                while (b==0)
+        b=0;
+        while (b==0)
+        {
+            for(int i=0; i<m_arcs.size(); i++ )
+            {
+                if(val_ind==m_arcs[i].m_indx)
                 {
-                    for(int i=0; i<m_arcs.size(); i++ )
-                    {
-                        if(val_ind==m_arcs[i].m_indx)
-                        {
-                            val_ind++;
-                        }
-                        else
-                        {
-                            b=1;
-                        }
-
-
-                    }
+                    val_ind++;
                 }
-         add_interfaced_arc(val_ind,ss1.m_index,ss2.m_index);
-         m_nbarcs++;
+                else
+                {
+                    b=1;
+                }
+
+
+            }
+        }
+        add_interfaced_arc(val_ind,ss1.m_index,ss2.m_index);
+        m_nbarcs++;
     }
 
 
@@ -396,6 +468,7 @@ void Graphe::update()
         std::cout << std::endl << "----------AJJOUT SOMMET----------" << std::endl << std::endl;
         std::cout << "Quel animal ou fruit voulez vous ?  ";
         std::cin >> nom;
+        nom+=".png";
         std::cout << "Combien en faut-il ?  ";
         std::cin >> population;
         std::cout << "Quelle fertilité pour l'espece ? (double)  ";
@@ -422,7 +495,12 @@ void Graphe::update()
         m_ordre++;
     }
 
-
+    if(m_interface->m_lancer_simulation.clicked())
+        simu=1;
+    if(m_interface->m_pause_simulation.clicked())
+        simu=0;
+    if(simu==1)
+        simulation();
 
 
     // supression des arcs
@@ -558,4 +636,12 @@ void Graphe::add_interfaced_arc(int idx, int id_som1, int id_som2, double poids)
     m_interface->m_main_box.add_child(ei->m_top_edge);
     Arc larc(poids, ei, idx,id_som1,id_som2);
     m_arcs.push_back(larc);
+
+    for (int i=0; i<m_sommets.size(); i++)
+    {
+        if(m_sommets[i].m_index==id_som1)
+            m_sommets[i].m_out.push_back(idx);
+        if(m_sommets[i].m_index==id_som2)
+            m_sommets[i].m_in.push_back(idx);
+    }
 }
