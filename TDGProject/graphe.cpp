@@ -1,4 +1,6 @@
 ﻿#include "graphe.h"
+#include <chrono>
+#include <thread>
 
 SommetInterface::SommetInterface(int idx, int x, int y, std::string nom_foto, int foto_idx)
 {
@@ -97,7 +99,7 @@ ArcInterface::ArcInterface(Sommet& from, Sommet& to)
 
     // Le slider de r�glage de valeur
     m_box_edge.add_child( m_slider_weight );
-    m_slider_weight.set_range(0.0, 100.0);  // Valeurs arbitraires, � adapter...
+    m_slider_weight.set_range(0.0, 1.0);  // Valeurs arbitraires, � adapter...
     m_slider_weight.set_dim(16,40);
     m_slider_weight.set_gravity_y(grman::GravityY::Up);
 
@@ -140,6 +142,7 @@ GrapheInterface::GrapheInterface(int x, int y, int w, int h)
 {
     m_top_box.set_dim(1000,740);
     m_top_box.set_gravity_xy(grman::GravityX::Right, grman::GravityY::Up);
+    m_top_box.set_bg_color(BLANCJAUNE);
 
     m_top_box.add_child(m_tool_box);
     m_tool_box.set_dim(80,720);
@@ -149,53 +152,53 @@ GrapheInterface::GrapheInterface(int x, int y, int w, int h)
     m_top_box.add_child(m_main_box);
     m_main_box.set_dim(908,720);
     m_main_box.set_gravity_xy(grman::GravityX::Right, grman::GravityY::Up);
-    m_main_box.set_bg_color(BLANCJAUNE);
+    m_main_box.set_bg_color(0xFFF8DC);
     //Bouton ajout de sommet1
     m_tool_box.add_child(m_bouton_ajout_sommet1);
     m_bouton_ajout_sommet1.set_frame(3,3,77,40);
-    m_bouton_ajout_sommet1.set_bg_color(VERTCLAIR);
+    m_bouton_ajout_sommet1.set_bg_color(0x749A6F);
     m_bouton_ajout_sommet1.add_child(m_bouton_ajout_sommet1_label);
     m_bouton_ajout_sommet1_label.set_message("Add s1");
     //Bouton ajout de sommeet 2
     m_tool_box.add_child(m_bouton_ajout_sommet2);
     m_bouton_ajout_sommet2.set_frame(3,43,77,40);
-    m_bouton_ajout_sommet2.set_bg_color(VERTCLAIR);
+    m_bouton_ajout_sommet2.set_bg_color(0xB7CA79);
     m_bouton_ajout_sommet2.add_child(m_bouton_ajout_sommet2_label);
     m_bouton_ajout_sommet2_label.set_message("Add s2");
     //Bouton link des deux sommets
     m_tool_box.add_child(m_bouton_link);
     m_bouton_link.set_frame(3,83,77,40);
-    m_bouton_link.set_bg_color(VERTCLAIR);
+    m_bouton_link.set_bg_color(0x749A6F);
     m_bouton_link.add_child(m_bouton_link_label);
     m_bouton_link_label.set_message("link");
     //bouton pour ajouter un sommet
     m_tool_box.add_child(m_ajouter_sommet);
     m_ajouter_sommet.set_frame(3,123,77,40);
-    m_ajouter_sommet.set_bg_color(VERTCLAIR);
+    m_ajouter_sommet.set_bg_color(0xB7CA79);
     m_ajouter_sommet.add_child(m_ajouter_sommet_label);
     m_ajouter_sommet_label.set_message("+ sommet");
     //bouton pour lancer la simulation
     m_tool_box.add_child(m_lancer_simulation);
     m_lancer_simulation.set_frame(3,163,77,40);
-    m_lancer_simulation.set_bg_color(VERTCLAIR);
+    m_lancer_simulation.set_bg_color(0x749A6F);
     m_lancer_simulation.add_child(m_lancer_simulation_label);
     m_lancer_simulation_label.set_message("Play");
     //bouton pour pauser la simulation
     m_tool_box.add_child(m_pause_simulation);
     m_pause_simulation.set_frame(3,203,77,40);
-    m_pause_simulation.set_bg_color(VERTCLAIR);
+    m_pause_simulation.set_bg_color(0xB7CA79);
     m_pause_simulation.add_child(m_pause_simulation_label);
     m_pause_simulation_label.set_message("Pause");
     // bouton pour load
     m_tool_box.add_child(m_bouton_load);
     m_bouton_load.set_frame(3,243,77,40);
-    m_bouton_load.set_bg_color(VERTCLAIR);
+    m_bouton_load.set_bg_color(0x749A6F);
     m_bouton_load.add_child(m_bouton_load_label);
     m_bouton_load_label.set_message("Load");
     //bouton pour save
     m_tool_box.add_child(m_bouton_save);
     m_bouton_save.set_frame(3,283,77,40);
-    m_bouton_save.set_bg_color(VERTCLAIR);
+    m_bouton_save.set_bg_color(0xB7CA79);
     m_bouton_save.add_child(m_bouton_save_label);
     m_bouton_save_label.set_message("Save");
 
