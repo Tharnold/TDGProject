@@ -36,6 +36,13 @@ SommetInterface::SommetInterface(int idx, int x, int y, std::string nom_foto, in
 
     m_box_label_idx.add_child( m_label_idx );
     m_label_idx.set_message( std::to_string(idx) );
+
+    // label de visualisation de la population
+    m_top_box.add_child( m_box_label_pop );
+    m_box_label_pop.set_frame(33,89,40,12);
+    m_box_label_pop.set_bg_color(BLANC);
+
+    m_box_label_pop.add_child( m_label_pop );
     //La croix pour suprimer un sommet
     m_top_box.add_child( m_bouton_delete );
     m_bouton_delete.set_frame(114,3,16,16);
@@ -68,6 +75,8 @@ void Sommet::pre_update()
 
     /// Copier la valeur locale de la donn�e m_value vers le label sous le slider
     m_interface->m_label_value.set_message( std::to_string( (int)m_fertilite) );
+
+    m_interface->m_label_pop.set_message(std::to_string((int)m_valeur));
 }
 
 

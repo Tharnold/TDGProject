@@ -21,6 +21,8 @@ private:
 
     grman::WidgetVSlider m_slider_value;
     grman::WidgetText m_label_value;
+    grman::WidgetText m_box_label_pop;
+    grman::WidgetText m_label_pop;
     grman::WidgetImage m_img;
     grman::WidgetText m_label_idx;
     grman::WidgetText m_box_label_idx;
