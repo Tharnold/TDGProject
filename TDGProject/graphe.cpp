@@ -1,4 +1,6 @@
-#include "graphe.h"
+﻿#include "graphe.h"
+#include <chrono>
+#include <thread>
 
 SommetInterface::SommetInterface(int idx, int x, int y, std::string nom_foto, int foto_idx)
 {
@@ -9,7 +11,7 @@ SommetInterface::SommetInterface(int idx, int x, int y, std::string nom_foto, in
 
     // Le slider de r�glage de valeur
     m_top_box.add_child( m_slider_value );
-    m_slider_value.set_range(0.0, 100.0);  // Valeurs arbitraires, � adapter...
+    m_slider_value.set_range(0.0, 1.0);  // Valeurs arbitraires, � adapter...
     m_slider_value.set_dim(20,80);
     m_slider_value.set_gravity_xy(grman::GravityX::Left, grman::GravityY::Up);
 
@@ -62,10 +64,10 @@ void Sommet::pre_update()
         return;
 
     /// Copier la valeur locale de la donn�e m_value vers le slider associ�
-    m_interface->m_slider_value.set_value(m_valeur);
+    m_interface->m_slider_value.set_value(m_fertilite);
 
     /// Copier la valeur locale de la donn�e m_value vers le label sous le slider
-    m_interface->m_label_value.set_message( std::to_string( (int)m_valeur) );
+    m_interface->m_label_value.set_message( std::to_string( (int)m_fertilite) );
 }
 
 
@@ -75,7 +77,7 @@ void Sommet::post_update()
         return;
 
     /// Reprendre la valeur du slider dans la donn�e m_value locale
-    m_valeur = m_interface->m_slider_value.get_value();
+    m_fertilite = m_interface->m_slider_value.get_value();
 }
 
 ArcInterface::ArcInterface(Sommet& from, Sommet& to)
@@ -124,7 +126,7 @@ void Arc::pre_update()
     m_interface->m_slider_weight.set_value(m_poids);
 
     /// Copier la valeur locale de la donn�e m_weight vers le label sous le slider
-    m_interface->m_label_weight.set_message( std::to_string( (int)m_poids ) );
+    m_interface->m_label_weight.set_message( std::to_string( (double)m_poids ) );
 }
 
 void Arc::post_update()
@@ -140,6 +142,7 @@ GrapheInterface::GrapheInterface(int x, int y, int w, int h)
 {
     m_top_box.set_dim(1000,740);
     m_top_box.set_gravity_xy(grman::GravityX::Right, grman::GravityY::Up);
+    m_top_box.set_bg_color(BLANCJAUNE);
 
     m_top_box.add_child(m_tool_box);
     m_tool_box.set_dim(80,720);
@@ -149,41 +152,53 @@ GrapheInterface::GrapheInterface(int x, int y, int w, int h)
     m_top_box.add_child(m_main_box);
     m_main_box.set_dim(908,720);
     m_main_box.set_gravity_xy(grman::GravityX::Right, grman::GravityY::Up);
-    m_main_box.set_bg_color(BLANCJAUNE);
+    m_main_box.set_bg_color(0xFFF8DC);
     //Bouton ajout de sommet1
     m_tool_box.add_child(m_bouton_ajout_sommet1);
     m_bouton_ajout_sommet1.set_frame(3,3,77,40);
-    m_bouton_ajout_sommet1.set_bg_color(VERTCLAIR);
+    m_bouton_ajout_sommet1.set_bg_color(0x749A6F);
     m_bouton_ajout_sommet1.add_child(m_bouton_ajout_sommet1_label);
     m_bouton_ajout_sommet1_label.set_message("Add s1");
     //Bouton ajout de sommeet 2
     m_tool_box.add_child(m_bouton_ajout_sommet2);
     m_bouton_ajout_sommet2.set_frame(3,43,77,40);
-    m_bouton_ajout_sommet2.set_bg_color(VERTCLAIR);
+    m_bouton_ajout_sommet2.set_bg_color(0xB7CA79);
     m_bouton_ajout_sommet2.add_child(m_bouton_ajout_sommet2_label);
     m_bouton_ajout_sommet2_label.set_message("Add s2");
     //Bouton link des deux sommets
     m_tool_box.add_child(m_bouton_link);
     m_bouton_link.set_frame(3,83,77,40);
-    m_bouton_link.set_bg_color(VERTCLAIR);
+    m_bouton_link.set_bg_color(0x749A6F);
     m_bouton_link.add_child(m_bouton_link_label);
     m_bouton_link_label.set_message("link");
     //bouton pour ajouter un sommet
     m_tool_box.add_child(m_ajouter_sommet);
     m_ajouter_sommet.set_frame(3,123,77,40);
-    m_ajouter_sommet.set_bg_color(VERTCLAIR);
+    m_ajouter_sommet.set_bg_color(0xB7CA79);
     m_ajouter_sommet.add_child(m_ajouter_sommet_label);
     m_ajouter_sommet_label.set_message("+ sommet");
+    //bouton pour lancer la simulation
+    m_tool_box.add_child(m_lancer_simulation);
+    m_lancer_simulation.set_frame(3,163,77,40);
+    m_lancer_simulation.set_bg_color(0x749A6F);
+    m_lancer_simulation.add_child(m_lancer_simulation_label);
+    m_lancer_simulation_label.set_message("Play");
+    //bouton pour pauser la simulation
+    m_tool_box.add_child(m_pause_simulation);
+    m_pause_simulation.set_frame(3,203,77,40);
+    m_pause_simulation.set_bg_color(0xB7CA79);
+    m_pause_simulation.add_child(m_pause_simulation_label);
+    m_pause_simulation_label.set_message("Pause");
     // bouton pour load
     m_tool_box.add_child(m_bouton_load);
-    m_bouton_load.set_frame(3,163,77,40);
-    m_bouton_load.set_bg_color(VERTCLAIR);
+    m_bouton_load.set_frame(3,243,77,40);
+    m_bouton_load.set_bg_color(0x749A6F);
     m_bouton_load.add_child(m_bouton_load_label);
     m_bouton_load_label.set_message("Load");
     //bouton pour save
     m_tool_box.add_child(m_bouton_save);
-    m_bouton_save.set_frame(3,203,77,40);
-    m_bouton_save.set_bg_color(VERTCLAIR);
+    m_bouton_save.set_frame(3,283,77,40);
+    m_bouton_save.set_bg_color(0xB7CA79);
     m_bouton_save.add_child(m_bouton_save_label);
     m_bouton_save_label.set_message("Save");
 
@@ -282,6 +297,67 @@ void Graphe::sauvegarde(std::string nom)
         }
     }
 }
+
+void Graphe::simulation()
+{
+    double popu=0;
+    double eaten=0;
+    double eat=0;
+    int som=0;
+    int rarc=0;
+    double pds=0;
+    for (int i=0; i<m_sommets.size(); i++)
+    {
+        popu=m_sommets[i].m_valeur;
+        popu+=m_sommets[i].m_valeur*(m_sommets[i].m_fertilite-m_sommets[i].m_deces_mois);
+        for(int j=0; j<m_sommets[i].m_in.size(); j++)
+        {
+            for(int k=0; k<m_sommets.size(); k++)
+            {
+                for(int l=0; l<m_arcs.size(); l++)
+                {
+                    if(m_arcs[l].m_indx==j)
+                        rarc=m_arcs[l].m_from;
+                    pds=m_arcs[l].m_poids;
+                }
+                if(m_sommets[k].m_index==rarc)
+                    som=k;
+            }
+            eaten+=pds*m_sommets[som].m_valeur;
+        }
+
+        for(int j=0; j<m_sommets[i].m_out.size(); j++)
+        {
+            for(int k=0; k<m_sommets.size(); k++)
+            {
+                for(int l=0; l<m_arcs.size(); l++)
+                {
+                    if(m_arcs[l].m_indx==j)
+                        rarc=m_arcs[l].m_to;
+                    pds=m_arcs[l].m_poids;
+                }
+                if(m_sommets[k].m_index==rarc)
+                    som=k;
+            }
+            eat+=pds*m_sommets[som].m_valeur;
+        }
+        popu-=eaten;
+        popu=ressources(popu,eat);
+        if(popu<0)
+            popu=0;
+        m_sommets[i].m_valeur=popu;
+        std::cout << "popu : " << popu << " /   i :   " << i << std::endl;
+    }
+}
+
+double Graphe::ressources(double base,double ress)
+{
+    if(base>ress)
+        return base-(base-ress)*0.75;
+    else
+        return base;
+}
+
 
 std::vector<int> Graphe::RechercheComposanteFortementConnexe(int s)
 {
@@ -437,6 +513,7 @@ std::vector<int> Graphe::RechercheComposanteFortementConnexe(int s)
 
     return c;
 }
+
 std::vector< std::vector<int> > Graphe::TouteLesComposantesFortementsConnexes()
 {
      std::vector< std::vector<int> > matrice_adjacence;
@@ -639,7 +716,12 @@ void Graphe::update()
         m_ordre++;
     }
 
-
+    if(m_interface->m_lancer_simulation.clicked())
+        simu=1;
+    if(m_interface->m_pause_simulation.clicked())
+        simu=0;
+    if(simu==1)
+        simulation();
 
 
     // supression des arcs
@@ -775,4 +857,12 @@ void Graphe::add_interfaced_arc(int idx, int id_som1, int id_som2, double poids)
     m_interface->m_main_box.add_child(ei->m_top_edge);
     Arc larc(poids, ei, idx,id_som1,id_som2);
     m_arcs.push_back(larc);
+
+    for (int i=0; i<m_sommets.size(); i++)
+    {
+        if(m_sommets[i].m_index==id_som1)
+            m_sommets[i].m_out.push_back(idx);
+        if(m_sommets[i].m_index==id_som2)
+            m_sommets[i].m_in.push_back(idx);
+    }
 }
