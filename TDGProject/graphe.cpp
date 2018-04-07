@@ -875,3 +875,71 @@ void Graphe::add_interfaced_arc(int idx, int id_som1, int id_som2, double poids)
             m_sommets[i].m_in.push_back(idx);
     }
 }
+void Graphe::surbrillance(std::vector<std::vector<int>> tabc)
+{
+    std::vector <int> rep;
+    std::vector <int> idxe;//cotient les indice des sommets appartenant a uen composante fortement connexe
+    std::vector<int> colou;
+    int cola=0;
+    colou.push_back(ROUGE);
+    colou.push_back(ROSE);
+    colou.push_back(VIOLET);
+
+    colou.push_back(VERT);
+    colou.push_back(CYAN);
+    colou.push_back(BLEU);
+    colou.push_back(ORANGE);
+    colou.push_back(JAUNE);
+    colou.push_back(NOIR);
+    colou.push_back(VERTSOMBRE);
+
+    for(int i=0;i<tabc.size();i++)
+    {
+        for(int j=0;j<tabc[i].size();j++)
+        {
+            if(tabc[i][j]==1 && tabc[i][j+1]==1)
+            {
+                rep.push_back(i);
+            }
+        }
+    }
+    //breh breh
+    for(int i=0;i<rep.size();i++)
+    {
+        //FOUTRE UN RESERT DE IDXE§!!!!!!!
+       for(int j=0;j<tabc[rep[i]].size();j++)
+       {
+           if(tabc[rep[i]][j]==1)
+           {
+               idxe.push_back(m_sommets[j].m_index);
+           }
+       }
+       //PARCOURS DES ARRETES
+       for(int a=0;a<m_arcs.size();a++)
+       {
+           //parcours des from
+           for(int f=0;f<idxe.size();f++)
+           {
+               if(m_arcs[a].m_from==idxe[f])
+               {
+                   //parcours des to
+                   for(int t=0;t<idxe.size();t++)
+                   {
+                       if(m_arcs[a].m_to==idxe[t])
+                       {
+
+                           m_arcs[a].m_interface->m_top_edge.set_color(colou[cola]);
+
+                       }
+                       //cola++;
+                   }
+
+
+               }
+
+           }
+
+
+       }
+    }
+}

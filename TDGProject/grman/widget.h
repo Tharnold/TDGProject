@@ -439,9 +439,9 @@ class WidgetEdge : public Widget
                                                              {ArrowItemType::Bullet, 1.0}  }; }
 
         void add_item( ArrowItem ai )  { m_items.push_back(ai); }
-
         void set_children_position(double rel_pos) { m_children_position = rel_pos; }
         void set_children_lateral(double abs_lat) { m_children_lateral = abs_lat; }
+        void set_color(int col){m_color=col;}
 };
 
 

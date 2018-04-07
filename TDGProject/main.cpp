@@ -28,6 +28,7 @@ int main()
        }
        std::cout<<std::endl;
    }
+   test.surbrillance(v);
 
 
     while ( !key[KEY_ESC] )

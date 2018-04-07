@@ -166,6 +166,7 @@ public:
         void suppression_arc(int indice);
         std::vector<int> RechercheComposanteFortementConnexe(int s);
         std::vector< std::vector<int> > TouteLesComposantesFortementsConnexes();
+        void surbrillance(std::vector<std::vector<int>> tabc);
         void simulation();
         double ressources(double base,double ress);
 
