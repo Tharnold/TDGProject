@@ -4,22 +4,22 @@
 
 SommetInterface::SommetInterface(int idx, int x, int y, std::string nom_foto, int foto_idx)
 {
-    // La boite englobante
+    //LA BOITE ENGLOBANTE
     m_top_box.set_pos(x, y);
     m_top_box.set_dim(130, 100);
     m_top_box.set_moveable();
 
-    // Le slider de r�glage de valeur
+    //LE SLIDER DE REGLAGE DE VALEUR
     m_top_box.add_child( m_slider_value );
-    m_slider_value.set_range(0.0, 1.0);  // Valeurs arbitraires, � adapter...
+    m_slider_value.set_range(0.0, 1.0);
     m_slider_value.set_dim(20,80);
     m_slider_value.set_gravity_xy(grman::GravityX::Left, grman::GravityY::Up);
 
-    // Label de visualisation de valeur
+    //LABEL DE VISUALISATION DE VALEUR
     m_top_box.add_child( m_label_value );
     m_label_value.set_gravity_xy(grman::GravityX::Left, grman::GravityY::Down);
 
-    // Une illustration...
+    //UNE ILLUSTRATION
     if (nom_foto!="")
     {
         m_top_box.add_child( m_img );
@@ -28,33 +28,31 @@ SommetInterface::SommetInterface(int idx, int x, int y, std::string nom_foto, in
         m_img.set_gravity_x(grman::GravityX::Right);
     }
 
-    // Label de visualisation d'index du sommet dans une boite
+    //LABEL DE VISUALISATION D INDEX DU SOMMET DANS UNE BOITE
     m_top_box.add_child( m_box_label_idx );
     m_box_label_idx.set_gravity_xy(grman::GravityX::Right, grman::GravityY::Down);
     m_box_label_idx.set_dim(20,12);
     m_box_label_idx.set_bg_color(BLANC);
-
     m_box_label_idx.add_child( m_label_idx );
     m_label_idx.set_message( std::to_string(idx) );
 
-    // label de visualisation de la population
+    //LABEL DE VISUALISATION DE LA POPULATION
     m_top_box.add_child( m_box_label_pop );
     m_box_label_pop.set_frame(33,89,40,12);
     m_box_label_pop.set_bg_color(BLANC);
-
     m_box_label_pop.add_child( m_label_pop );
-    //La croix pour suprimer un sommet
+
+    //BOUTON POUR LA SUPPRESSION DU SOMMET
     m_top_box.add_child( m_bouton_delete );
     m_bouton_delete.set_frame(114,3,16,16);
     m_bouton_delete.set_bg_color(ROUGE);
-
     m_bouton_delete.add_child(m_bouton_delete_label);
     m_bouton_delete_label.set_message("X");
-    //bouton pour relier deux sommets
+
+    //BOUTON POUR SELECTIONNER LE SOMMET LORS DE L AJOUT D UNE ARRETE
     m_top_box.add_child( m_bouton_link );
     m_bouton_link.set_frame(114,23,16,16);
     m_bouton_link.set_bg_color(JAUNE);
-
     m_bouton_link.add_child(m_bouton_link_label);
     m_bouton_link_label.set_message("+");
 }
@@ -70,12 +68,11 @@ void Sommet::pre_update()
     if (!m_interface)
         return;
 
-    /// Copier la valeur locale de la donn�e m_value vers le slider associ�
+    //MAJ DE LA VALEUR DU SLIDER
     m_interface->m_slider_value.set_value(m_fertilite);
 
-    /// Copier la valeur locale de la donn�e m_value vers le label sous le slider
+    //MAJ DE L AFFICHAGE DE LA VALEUR DU SLIDER
     m_interface->m_label_value.set_message( std::to_string( (int)m_fertilite) );
-
     m_interface->m_label_pop.set_message(std::to_string((int)m_valeur));
 }
 
@@ -85,13 +82,13 @@ void Sommet::post_update()
     if (!m_interface)
         return;
 
-    /// Reprendre la valeur du slider dans la donn�e m_value locale
+    //MAJ DE LA VALEUR ASSOCIEE AU SLIDER
     m_fertilite = m_interface->m_slider_value.get_value();
 }
 
 ArcInterface::ArcInterface(Sommet& from, Sommet& to)
 {
-    // Le WidgetEdge de l'interface de l'arc
+    //WIDGETEDGE DE L INTERFACE DE L ARC
     if ( !(from.m_interface && to.m_interface) )
     {
         std::cerr << "Error creating SommetInterface between vertices having no interface" << std::endl;
@@ -101,29 +98,27 @@ ArcInterface::ArcInterface(Sommet& from, Sommet& to)
     m_top_edge.attach_to(to.m_interface->m_top_box);
     m_top_edge.reset_arrow_with_bullet();
 
-    // Une boite pour englober les widgets de r�glage associ�s
+    //BOITE DE REGLAGE DE L ARC
     m_top_edge.add_child(m_box_edge);
     m_box_edge.set_dim(24,75);
     m_box_edge.set_bg_color(BLANCBLEU);
 
-    // Le slider de r�glage de valeur
+    //SLIDER DE L ARC
     m_box_edge.add_child( m_slider_weight );
-    m_slider_weight.set_range(0.0, 100.0);  // Valeurs arbitraires, � adapter...
+    m_slider_weight.set_range(0.0, 100.0);
     m_slider_weight.set_dim(16,40);
     m_slider_weight.set_gravity_y(grman::GravityY::Up);
 
-    // Label de visualisation de valeur
+    //LABEL DE VISUALISATION DE LA VALEUR ASSOCIEE AU SLIDER
     m_box_edge.add_child( m_label_weight );
     m_label_weight.set_gravity_y(grman::GravityY::Down);
 
-    //Ajout u bouton supr
+    //BOUTON POUR SUPPRIMER UNE ARETE
     m_box_edge.add_child( m_bouton_delete );
     m_bouton_delete.set_frame(6,50,16,16);
     m_bouton_delete.set_bg_color(ROUGE);
-
     m_bouton_delete.add_child(m_bouton_delete_label);
     m_bouton_delete_label.set_message("X");
-
 }
 
 void Arc::pre_update()
@@ -131,10 +126,10 @@ void Arc::pre_update()
     if (!m_interface)
         return;
 
-    /// Copier la valeur locale de la donn�e m_weight vers le slider associ�
+    //COPIER LA VALEUR LOCALE DU POIDS VERS LE SLIDER
     m_interface->m_slider_weight.set_value(m_poids);
 
-    /// Copier la valeur locale de la donn�e m_weight vers le label sous le slider
+    //COPIER LA VALEUR LOCALE DU POIDS VERS LE LABEL SOUS LE SLIDER
     m_interface->m_label_weight.set_message( std::to_string( (double)m_poids ) );
 }
 
@@ -143,75 +138,87 @@ void Arc::post_update()
     if (!m_interface)
         return;
 
-    /// Reprendre la valeur du slider dans la donn�e m_weight locale
+    //REPRENDRE LA VALEUR DU SLIDER DANS LA DONNEE
     m_poids = m_interface->m_slider_weight.get_value();
 }
 
 GrapheInterface::GrapheInterface(int x, int y, int w, int h)
 {
+    //INITIALISATION DE LA BOITE ENGLOBANT TOUT L INTERFACE
     m_top_box.set_dim(1000,740);
     m_top_box.set_gravity_xy(grman::GravityX::Right, grman::GravityY::Up);
     m_top_box.set_bg_color(BLANCJAUNE);
 
+    //AJOUT DE LA BOITE D OUTILS
     m_top_box.add_child(m_tool_box);
     m_tool_box.set_dim(80,720);
     m_tool_box.set_gravity_xy(grman::GravityX::Left, grman::GravityY::Up);
     m_tool_box.set_bg_color(BLANCBLEU);
 
+    //AJOUT DE LA BOITE OU AFFICHER LE GRAPHE
     m_top_box.add_child(m_main_box);
     m_main_box.set_dim(908,720);
     m_main_box.set_gravity_xy(grman::GravityX::Right, grman::GravityY::Up);
     m_main_box.set_bg_color(0xFFF8DC);
-    //Bouton ajout de sommet1
+
+    //BOUTON POUR SELECTIONNER LE SOMMET 1
     m_tool_box.add_child(m_bouton_ajout_sommet1);
     m_bouton_ajout_sommet1.set_frame(3,3,77,40);
     m_bouton_ajout_sommet1.set_bg_color(0x749A6F);
     m_bouton_ajout_sommet1.add_child(m_bouton_ajout_sommet1_label);
     m_bouton_ajout_sommet1_label.set_message("Add s1");
-    //Bouton ajout de sommeet 2
+
+    //BOUTON POUR SELECTIONNER LE SOMMET 2
     m_tool_box.add_child(m_bouton_ajout_sommet2);
     m_bouton_ajout_sommet2.set_frame(3,43,77,40);
     m_bouton_ajout_sommet2.set_bg_color(0xB7CA79);
     m_bouton_ajout_sommet2.add_child(m_bouton_ajout_sommet2_label);
     m_bouton_ajout_sommet2_label.set_message("Add s2");
-    //Bouton link des deux sommets
+
+    //BOUTON POUR CREER UNE ARETE ENTRE LES SOMMETS 1 ET 2
     m_tool_box.add_child(m_bouton_link);
     m_bouton_link.set_frame(3,83,77,40);
     m_bouton_link.set_bg_color(0x749A6F);
     m_bouton_link.add_child(m_bouton_link_label);
     m_bouton_link_label.set_message("link");
-    //bouton pour ajouter un sommet
+
+    //BOUTON POUR AJOUTER UN SOMMET
     m_tool_box.add_child(m_ajouter_sommet);
     m_ajouter_sommet.set_frame(3,123,77,40);
     m_ajouter_sommet.set_bg_color(0xB7CA79);
     m_ajouter_sommet.add_child(m_ajouter_sommet_label);
     m_ajouter_sommet_label.set_message("+ sommet");
-    //bouton pour lancer la simulation
+
+    //BOUTON POUR LANCER LA SIMULATION
     m_tool_box.add_child(m_lancer_simulation);
     m_lancer_simulation.set_frame(3,163,77,40);
     m_lancer_simulation.set_bg_color(0x749A6F);
     m_lancer_simulation.add_child(m_lancer_simulation_label);
     m_lancer_simulation_label.set_message("Play");
-    //bouton pour pauser la simulation
+
+    //BOUTON POUR METTRE EN PAUSE LA SIMULATION
     m_tool_box.add_child(m_pause_simulation);
     m_pause_simulation.set_frame(3,203,77,40);
     m_pause_simulation.set_bg_color(0xB7CA79);
     m_pause_simulation.add_child(m_pause_simulation_label);
     m_pause_simulation_label.set_message("Pause");
-    // bouton pour load
+
+    //BOUTON POUR CHARGER UN GRAPHE DANS UN FICHIER
     m_tool_box.add_child(m_bouton_load);
     m_bouton_load.set_frame(3,243,77,40);
     m_bouton_load.set_bg_color(0x749A6F);
     m_bouton_load.add_child(m_bouton_load_label);
     m_bouton_load_label.set_message("Load");
-    //bouton pour save
+
+    //BOUTON POUR SAUVEGARDER LE GRAPHE EN COURS D UTILISATION DANS UN FICHIER
     m_tool_box.add_child(m_bouton_save);
     m_bouton_save.set_frame(3,283,77,40);
     m_bouton_save.set_bg_color(0xB7CA79);
     m_bouton_save.add_child(m_bouton_save_label);
     m_bouton_save_label.set_message("Save");
-    //bouton pour la forte connextite
-     m_tool_box.add_child(m_bouton_forteco);
+
+    //BOUTON POUR AFFICHER LES COMPOSANTES FORTEMENTS CONNEXES DU GRAPHE ACTIF
+    m_tool_box.add_child(m_bouton_forteco);
     m_bouton_forteco.set_frame(3,323,77,40);
     m_bouton_forteco.set_bg_color(0xB7CA79);
     m_bouton_forteco.add_child(m_bouton_forteco_label);
@@ -223,18 +230,19 @@ GrapheInterface::GrapheInterface(int x, int y, int w, int h)
 void Graphe::lecture(std::string nom)
 {
 
-    std::string nf;// nom du fichier
+    std::string nf;
     nf=nom;
     nf+=".txt";
+
     //VALEURS POUR STOCKER LES DONEES DU FICHIER
-    //  Graphe tmp;
     m_interface= std::make_shared<GrapheInterface>(50, 0, 750, 600);
-    int idx,x,y; // pour les arretes x et y coresspondent respectivement a id_som1 et id_som2
-    double val,fertilite,deces;// pour les arretes coresspond a poids
+    int idx,x,y;
+    double val,fertilite,deces;
     std::string nom_foto;
     int nb_sommets;
     int nb_arretes;
-    m_link=0;
+
+    //OUVERTURE DU FICHER
     std::ifstream fichier(nf);
     if(fichier)
     {
@@ -243,6 +251,8 @@ void Graphe::lecture(std::string nom)
         std::cout << "recup ordre et tt" << std::endl;
         m_ordre=nb_sommets;
         m_nbarcs=nb_arretes;
+
+        //RECUPERATION DES VALEURS DES SOMMETS
         for(int i=0; i< nb_sommets; i++)
         {
             fichier >> idx;
@@ -253,48 +263,38 @@ void Graphe::lecture(std::string nom)
             fichier >> fertilite;
             fichier >> deces;
             add_interfaced_sommet(idx,val,x,y,nom_foto);
-
         }
+
+        //RECUPERATION DES VALEURS DES ARCS
         for(int i=0; i< nb_arretes; i++)
         {
-
             fichier >> idx;
-
             fichier >> x;
-
             fichier >> y;
-
             fichier >> val;
-
-
             add_interfaced_arc(idx,x,y,val);
-
         }
-
-        // return tmp;
-        //  std::cout << m_sommets[1].m_interface->m_top_box.get_posx();
-
     }
     else
     {
 
         std::cerr <<"l'ouverture du fichier est un echec cuisant"<< std::endl;
     }
-
-
-
 }
 
 void Graphe::sauvegarde(std::string nom)
 {
+    //OUVERTURE DU FICHIER
     nom+=".txt";
     std::ofstream fichier(nom, std::ios::trunc);
     if(fichier)
     {
+        //ECRITURE DANS LE FICHIER
         fichier << m_ordre << std::endl;
         fichier << m_nbarcs << std::endl;
         for(auto &elt : m_sommets)
         {
+            //ECRITURE DES VALEURS DES SOMMETS
             fichier << elt.m_index << " ";
             fichier << elt.m_valeur << " ";
             fichier << elt.m_interface->m_top_box.get_frame_pos().x << " ";
@@ -305,6 +305,7 @@ void Graphe::sauvegarde(std::string nom)
         }
         for(auto &elt : m_arcs)
         {
+            //ECRITURE DES VALEURS DES ARETES
             fichier << elt.m_indx << " ";
             fichier << elt.m_from << " ";
             fichier << elt.m_to << " ";
@@ -378,20 +379,14 @@ std::vector<int> Graphe::RechercheComposanteFortementConnexe(int s)
 {
     //VARIABLES
     std::vector< std::vector<int> > matrice_adjacence;
-    std::vector<int> tmp;
-    std::vector <int> c1;
-    std::vector <int> c2;
-    std::vector <int> c;
-    std::vector <int> jean;
-    std::vector <int> marques;
-    //int x;
-    int a,b;
-    //int y;
-    int ajoute =1;
-    //  int s;
-    int blind=0;
-
-    //RECUPERATION DU SOMMET DE REFERENCE
+    std::vector<int> tmp;   //VECTEUR TAMPON
+    std::vector <int> c1;  //COMPOSANTE CONNEXE DIRECTES PARTANTS DE S
+    std::vector <int> c2;  //COMPOSANTE CONNEXE INDIRECTS ARRIVANT VERS S
+    std::vector <int> c;    //COMPOSANTE FORTEMENT CONNEXE QUE L ON VA RETOURNER
+    std::vector <int> jean;  //COMPOSANTE PARTANT D UN SOMMET POUR VERIFIER S IL PEUT ALLER JUSQU A S POUR L AJOUTER A C2
+    std::vector <int> marques;  //TABLEAU INDIQUANTS SI LES SOMMETS SONT MARQUES
+    int a,b;    //ENTIERS POUR REMPLIR LA MATRICE D ADJACENCE
+    int ajoute =1;  //BOOLEEN INDIQUANT SI ON AJOUTE UNE NOUVELLE COMPOSANTE CONNEXE
 
     //INITIALISATION DE LA MATRICE D ADJACENCE
     for(int j=0; j<m_ordre; j++)
@@ -402,6 +397,7 @@ std::vector<int> Graphe::RechercheComposanteFortementConnexe(int s)
     {
         matrice_adjacence.push_back(tmp);
     }
+
     //REMPLISSAGE DE LA MATRICE D ADJACENCE.
     for(int i=0; i<m_arcs.size(); i++)
     {
@@ -412,6 +408,7 @@ std::vector<int> Graphe::RechercheComposanteFortementConnexe(int s)
                 a=j;
             }
         }
+
         for(int t=0; t<m_sommets.size(); t++)
         {
             if(m_sommets[t].m_index==m_arcs[i].m_to)
@@ -420,7 +417,6 @@ std::vector<int> Graphe::RechercheComposanteFortementConnexe(int s)
             }
         }
         matrice_adjacence[a][b]=1;
-        //   matrice_adjacence[b][a]=1;
     }
 
     //INTIALISATIONS DES VECTEURS
@@ -432,6 +428,7 @@ std::vector<int> Graphe::RechercheComposanteFortementConnexe(int s)
         jean.push_back(0);
         marques.push_back(0);
     }
+
     //LE SOMMET S DEVIENT CONNEXE
     for(int i=0; i<m_ordre; i++)
     {
@@ -442,22 +439,22 @@ std::vector<int> Graphe::RechercheComposanteFortementConnexe(int s)
         }
     }
 
-
-    //RECHERCHE C1
+    //RECHERCHE DES COMPOSANTES CONNEXES PARTANT DE S
     while(ajoute==1)
     {
         ajoute=0;
-
 
         for(int x=0; x<m_ordre; x++)
         {
             if(marques[x]==0 && c1[x]==1)
             {
                 marques[x]=1;
+
                 for(int y=0; y<m_ordre; y++)
                 {
                     if(matrice_adjacence[x][y]==1 && marques[y]==0)
                     {
+                        //AJOUT DE LA NOUVELLE COMPOSANTE CONNEXE
                         c1[y]=1;
                         ajoute=1;
                     }
@@ -465,16 +462,18 @@ std::vector<int> Graphe::RechercheComposanteFortementConnexe(int s)
             }
         }
     }
-    //RECHERCHE C2
+
+    //RECHERCHE DES COMPOSANTES CONNEXES ARRIVANT A S
     for(int i=0; i<m_ordre; i++)
     {
-        //RESET DE MARQUES et jean
 
+        //RESET DE MARQUES ET JEAN
         for(int t=0; t<m_ordre; t++)
         {
             marques[t]=0;
             jean[t]=0;
         }
+
         //LE SOMMET S DEVIENT CONNEXE
         for(int t=0; t<m_ordre; t++)
         {
@@ -483,18 +482,19 @@ std::vector<int> Graphe::RechercheComposanteFortementConnexe(int s)
                 jean[t]=1;
             }
         }
-        //REBAIL PTDRLOLXD
+
+        //RECHERCHE DES COMPOSANTES CONNEXE PARTANT DE I
         ajoute=1;
         while(ajoute==1)
         {
             ajoute=0;
-
 
             for(int x=0; x<m_ordre; x++)
             {
                 if(marques[x]==0 && jean[x]==1)
                 {
                     marques[x]=1;
+
                     for(int y=0; y<m_ordre; y++)
                     {
                         if(matrice_adjacence[x][y]==1 && marques[y]==0)
@@ -506,26 +506,29 @@ std::vector<int> Graphe::RechercheComposanteFortementConnexe(int s)
                 }
             }
         }
-        //REGARDER SI CE TRUC PEUT ALLER A S
-        for(int g=0; g<m_ordre; g++)  //PARCOURS DE TMP
+
+        //ON REGARDE SI LA COMOSANTE ARRIVE JUSQU A S
+        for(int g=0; g<m_ordre; g++)
         {
             if(m_sommets[g].m_index==s)
             {
                 if(jean[g]==1)
                 {
+                    //AJOUT DE LA COMPOSANTE CONNEXE
                     c2[i]=1;
                 }
             }
         }
 
     }
+
     //CREATION DE LA COMPOSANTE FORTEMENT CONNEXE
     for(int i=0; i<m_ordre; i++)
     {
         c[i]=c1[i]&c2[i];
     }
 
-
+    //ON RETURN LA COMPOSANTE FORTEMENT CONNEXE
     return c;
 }
 
@@ -536,6 +539,7 @@ std::vector< std::vector<int> > Graphe::TouteLesComposantesFortementsConnexes()
     std::vector<int> marques;
     std::vector<int> tmp;
     int a,b;
+
     //INITIALISATION DE LA MATRICE D ADJACENCE + TABC + MARQUES
     for(int j=0; j<m_ordre; j++)
     {
@@ -547,6 +551,7 @@ std::vector< std::vector<int> > Graphe::TouteLesComposantesFortementsConnexes()
         matrice_adjacence.push_back(tmp);
         tabc.push_back(tmp);
     }
+
     //REMPLISSAGE DE LA MATRICE D ADJACENCE.
     for(int i=0; i<m_arcs.size(); i++)
     {
@@ -565,14 +570,17 @@ std::vector< std::vector<int> > Graphe::TouteLesComposantesFortementsConnexes()
             }
         }
         matrice_adjacence[a][b]=1;
-        //   matrice_adjacence[b][a]=1;
+
     }
+
+    //RECHERCHE DE LA COMPOSANTE FORTEMENT CONNEXE DE TOUT LES SOMMETS
     for(int x=0; x<m_ordre; x++)
     {
         if(marques[x]==0)
         {
             tabc[x]=RechercheComposanteFortementConnexe(m_sommets[x].m_index);
             marques[x]=1;
+
             for(int y=0; y<m_ordre; y++)
             {
                 if(tabc[x][y]==1 && marques[y]==0)
@@ -582,11 +590,7 @@ std::vector< std::vector<int> > Graphe::TouteLesComposantesFortementsConnexes()
             }
         }
     }
-    for(int x=0; x<m_ordre; x++)
-    {
-        std::cout<<m_sommets[x].m_index<<" ";
-    }
-    std::cout<<std::endl;
+
     return tabc;
 
 }
@@ -622,10 +626,13 @@ void Graphe::update()
         //elt.second.post_update();
         elt.post_update();
 
+    //AFFICHAGE DES COMPOSANTES FORTEMENTS CONNEXES
     if(m_interface->m_bouton_forteco.clicked())
     {
         surbrillance(TouteLesComposantesFortementsConnexes());
     }
+
+    //INDICATION DE SI L ON VEUT SELECTIONNER LE SOMMETS DE DEPART OU D ARRIVEE POUR LA CREATION D UN ARC
     if(m_interface->m_bouton_ajout_sommet1.clicked()&&bol!=1)
     {
         bol=1;
@@ -635,6 +642,7 @@ void Graphe::update()
         bol=2;
     }
 
+    //PARCOURS DES SOMMETS POUR LES BOUTONS CLICK
     for(int i=0; i<m_sommets.size(); i++)
     {
 
@@ -902,9 +910,9 @@ void Graphe::surbrillance(std::vector<std::vector<int>> tabc)
     colou.push_back(JAUNE);
     colou.push_back(NOIR);
     colou.push_back(VERTFLUOSOMBRE);
-    for(int i=0;i<tabc.size();i++)
+    for(int i=0; i<tabc.size(); i++)
     {
-        for(int j=0;j<tabc[i].size();j++)
+        for(int j=0; j<tabc[i].size(); j++)
         {
             if(tabc[i][j]==1)
             {
@@ -914,26 +922,26 @@ void Graphe::surbrillance(std::vector<std::vector<int>> tabc)
     }
 
     //LA NORMALEMENT C BON CHAQUE SOMMET A UNE COULEUR L ASSOCIANT A UE COMPOSANTE FORTEMENT CONNEXE
-    for(int i=0;i<m_arcs.size();i++)
+    for(int i=0; i<m_arcs.size(); i++)
     {
         //boucle pour choper from
-        for(int f=0;f<m_sommets.size();f++)
+        for(int f=0; f<m_sommets.size(); f++)
         {
             if(m_sommets[f].m_index==m_arcs[i].m_from)
             {
                 mf=m_sommets[f].m_cfc;
-                std::cout<<mf<<" ";
+
 
             }
         }
 
         //boucle pour choper to
-        for(int f=0;f<m_sommets.size();f++)
+        for(int f=0; f<m_sommets.size(); f++)
         {
             if(m_sommets[f].m_index==m_arcs[i].m_to)
             {
                 mt=m_sommets[f].m_cfc;
-                std::cout<<mt<<" ";
+
             }
         }
         if(mf==mt)

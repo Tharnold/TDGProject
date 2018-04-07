@@ -8,7 +8,7 @@ int main()
     std::string nom;
 
     grman::set_pictures_path("foto");
-    std::vector <std::vector<int>>v;
+
    std::cin >>nom;
 
     grman::init();
