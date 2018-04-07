@@ -878,7 +878,6 @@ void Graphe::add_interfaced_arc(int idx, int id_som1, int id_som2, double poids)
     }
 
     ArcInterface *ei = new ArcInterface(som1,som2);
-//    *ei.pls=&*ei.m_top_edge;
 
     m_interface->m_main_box.add_child(ei->m_top_edge);
     Arc larc(poids, ei, idx,id_som1,id_som2);
