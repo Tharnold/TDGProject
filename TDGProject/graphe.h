@@ -165,9 +165,12 @@ private:
     //BOUTON POUR SAUVEGARDER LE GRAPHE EN COURS D'UTILISATION
     grman::WidgetButton m_bouton_save;
     grman::WidgetText m_bouton_save_label;
-     //BOUTON POUR METTRE EN SURBRILLANCE LES COMPOSANTES FORTEMENT CONNEXES
+    //BOUTON POUR METTRE EN SURBRILLANCE LES COMPOSANTES FORTEMENT CONNEXES
     grman::WidgetButton m_bouton_forteco;
     grman::WidgetText m_bouton_forteco_label;
+    //BOUTTON POUR QUITTER
+    grman::WidgetButton m_bouton_quit;
+    grman::WidgetText m_bouton_quit_label;
 
 public:
     //CONSTRUCTEUR DE L'INTERFACE DU GRAPHE
@@ -221,6 +224,8 @@ public:
     void simulation();
     //FONCTION DETERMINANT SI LES RESSOURCES SONT SUFFISANTES
     double ressources(double base,double ress);
+    //QUITTER
+    int QUIT();
 };
 
 #endif // GRAPHE_H_INCLUDED

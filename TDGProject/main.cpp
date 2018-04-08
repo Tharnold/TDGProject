@@ -5,6 +5,8 @@
 
 int main()
 {
+    //BOOLEEN POUR QUITTER
+    int quit=0;
     //DEFINITION DU DOSSIER POUR LES PHOTOS
     grman::set_pictures_path("foto");
     //VARIABLE DE RECUPERATION
@@ -19,12 +21,19 @@ int main()
     //RECUPERATION DU GRAPHE DANS LE FICHER
     test.lecture(nom);
     //DEBUT DE LA BOUCLE D'ACTION
-    while ( !key[KEY_ESC] )
+    while ( !key[KEY_ESC])
     {
         //MISE A JOUR DU GRAPHE
         test.update();
         //MISA A JOUR DE L'AFFICHAGE
         grman::mettre_a_jour();
+        //TEST POUR QUITTER
+        quit=test.QUIT();
+        if(quit)
+        {
+            grman::fermer_allegro();
+            return 0;
+        }
     }
     //FERMETURE DE l4AFFICHAGE
     grman::fermer_allegro();

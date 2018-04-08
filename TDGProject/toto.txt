@@ -1,0 +1,20 @@
+8
+10
+0 30 200 100 black-ant.png 0 0
+1 14.2857 400 100 clouded-leopard.png 0 0
+2 50 59 266 down-bat.png 0 0
+3 0 400 300 earthworm.png 0 0
+4 40 600 300 poison-dart-frog.png 0 0
+5 0 100 500 saprophytes.png 0 0
+6 0 300 500 sloth.png 0 0
+7 0 500 500 spider-monkey.png 0 0
+0 5 7 50
+1 5 6 50
+2 1 7 75
+3 1 6 25
+4 5 1 25
+5 5 4 25
+6 4 0 0
+7 4 3 100
+8 3 5 20
+9 2 3 80

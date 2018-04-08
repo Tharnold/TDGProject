@@ -145,19 +145,16 @@ void Arc::post_update()
 GrapheInterface::GrapheInterface(int x, int y, int w, int h)
 {
     //INITIALISATION DE LA BOITE ENGLOBANT TOUT L INTERFACE
-    m_top_box.set_dim(1000,740);
+     m_top_box.set_dim(790,590);
     m_top_box.set_gravity_xy(grman::GravityX::Right, grman::GravityY::Up);
-    m_top_box.set_bg_color(BLANCJAUNE);
 
-    //AJOUT DE LA BOITE D OUTILS
     m_top_box.add_child(m_tool_box);
-    m_tool_box.set_dim(80,720);
+    m_tool_box.set_dim(90,590);
     m_tool_box.set_gravity_xy(grman::GravityX::Left, grman::GravityY::Up);
     m_tool_box.set_bg_color(BLANCBLEU);
 
-    //AJOUT DE LA BOITE OU AFFICHER LE GRAPHE
     m_top_box.add_child(m_main_box);
-    m_main_box.set_dim(908,720);
+    m_main_box.set_dim(700,590);
     m_main_box.set_gravity_xy(grman::GravityX::Right, grman::GravityY::Up);
     m_main_box.set_bg_color(0xFFF8DC);
 
@@ -224,6 +221,12 @@ GrapheInterface::GrapheInterface(int x, int y, int w, int h)
     m_bouton_forteco.add_child(m_bouton_forteco_label);
     m_bouton_forteco_label.set_message("elt.cnx");
 
+    //BOUTON QUITTER
+    m_tool_box.add_child(m_bouton_quit);
+    m_bouton_quit.set_frame(3,363,77,40);
+    m_bouton_quit.set_bg_color(0xB7CA79);
+    m_bouton_quit.add_child(m_bouton_quit_label);
+    m_bouton_quit_label.set_message("Quit");
 
 }
 
@@ -964,4 +967,10 @@ void Graphe::surbrillance(std::vector<std::vector<int>> tabc)
 
         }
     }
+}
+
+int Graphe::QUIT()
+{
+    if(m_interface->m_bouton_quit.clicked())
+        return 1;
 }
