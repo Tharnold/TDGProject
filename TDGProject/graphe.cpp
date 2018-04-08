@@ -146,16 +146,16 @@ void Arc::post_update()
 GrapheInterface::GrapheInterface(int x, int y, int w, int h)
 {
     //INITIALISATION DE LA BOITE ENGLOBANT TOUT L INTERFACE
-    m_top_box.set_dim(1000,740);
+    m_top_box.set_dim(790,590);
     m_top_box.set_gravity_xy(grman::GravityX::Right, grman::GravityY::Up);
 
     m_top_box.add_child(m_tool_box);
-    m_tool_box.set_dim(90,720);
+    m_tool_box.set_dim(90,590);
     m_tool_box.set_gravity_xy(grman::GravityX::Left, grman::GravityY::Up);
     m_tool_box.set_bg_color(BLANCBLEU);
 
     m_top_box.add_child(m_main_box);
-    m_main_box.set_dim(908,720);
+    m_main_box.set_dim(700,590);
     m_main_box.set_gravity_xy(grman::GravityX::Right, grman::GravityY::Up);
     m_main_box.set_bg_color(0xFFF8DC);
 
@@ -513,7 +513,9 @@ void Graphe::simulation()
             popu=0;
         m_sommets[i].m_valeur=popu;
         std::cout << "popu : " << popu << " /   i :   " << i << std::endl;
+
         std::this_thread::sleep_for(std::chrono::milliseconds(20));
+
 
     }
 }
