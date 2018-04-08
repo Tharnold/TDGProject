@@ -19,6 +19,9 @@ int main()
     //RECUPERATION DU GRAPHE DANS LE FICHER
     test.lecture(nom);
     //DEBUT DE LA BOUCLE D'ACTION
+  // test.algodekco();
+
+   //test.kco(6);
     while ( !key[KEY_ESC] )
     {
         //MISE A JOUR DU GRAPHE

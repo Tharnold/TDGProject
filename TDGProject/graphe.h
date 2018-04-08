@@ -67,6 +67,9 @@ private:
     //POINTEUR SUR L'INTERFACE DU SOMMET
     std::shared_ptr<SommetInterface> m_interface = nullptr;
 
+     int m_actif;
+     int m_cc;
+
 public:
     //CONSTRUCTEUR DU SOMMET QUI APPELLE CELUI DE L'INTERFACE
     Sommet(double valeur=0, SommetInterface *interface=nullptr, int idx=0) :
@@ -136,38 +139,60 @@ class GrapheInterface
 
 private:
     //BOITE PRINCIPALE
+
     grman::WidgetBox m_top_box;
     //BOITE CONTENANT LE GRAPHE
+
     grman::WidgetBox m_main_box;
     //BOITE AVEC LES BOUTONS
+
     grman::WidgetBox m_tool_box;
     //BOUTON D'AJOUT DU PREMIER SOMMET POUR LA CREATION D'UN ARC
+
     grman::WidgetButton m_bouton_ajout_sommet1;
     grman::WidgetText m_bouton_ajout_sommet1_label;
     //BOUTON D'AJOUT DU DEUXIEME SOMMET POUR LA CREATION D'UN ARC
+
     grman::WidgetButton m_bouton_ajout_sommet2;
     grman::WidgetText m_bouton_ajout_sommet2_label;
     //BOUTON DE POUR CREER UN ARC ENTRE LES SOMMET 1 ET 2 ENTRES
+
     grman::WidgetButton m_bouton_link;
     grman::WidgetText m_bouton_link_label;
+
     //BOUTON POUR AJOUTER UN SOMMET
     grman::WidgetButton m_ajouter_sommet;
     grman::WidgetText m_ajouter_sommet_label;
+
     //BOUTON POUR LANCER LA SIMULATION
     grman::WidgetButton m_lancer_simulation;
     grman::WidgetText m_lancer_simulation_label;
+
     //BOUTON POUR METTRE EN PAUSE LA SIMULATION
     grman::WidgetButton m_pause_simulation;
     grman::WidgetText m_pause_simulation_label;
+
     //BOUTON POUR CHARGER LE GRAPHE D'UN FICHIER
     grman::WidgetButton m_bouton_load;
     grman::WidgetText m_bouton_load_label;
+
     //BOUTON POUR SAUVEGARDER LE GRAPHE EN COURS D'UTILISATION
     grman::WidgetButton m_bouton_save;
     grman::WidgetText m_bouton_save_label;
-     //BOUTON POUR METTRE EN SURBRILLANCE LES COMPOSANTES FORTEMENT CONNEXES
+
+    //BOUTON POUR METTRE EN SURBRILLANCE LES COMPOSANTES FORTEMENT CONNEXES
     grman::WidgetButton m_bouton_forteco;
     grman::WidgetText m_bouton_forteco_label;
+
+    //BOUTON POUR RESET LES COULEURS DES ARCS
+    grman::WidgetButton m_bouton_resetcol;
+    grman::WidgetText m_bouton_resetcol_label;
+
+    //BOUTON AFFICHER L ELEMENT FAIBLE DU GRAPHE
+    grman::WidgetButton m_bouton_kco;
+    grman::WidgetText m_bouton_kco_label;
+
+
 
 public:
     //CONSTRUCTEUR DE L'INTERFACE DU GRAPHE
@@ -191,6 +216,12 @@ private:
     int bol;
     //BOOLEEN INDIQUANT SI LA SIMULATION TOURNE OU NON(GESTION DE LA PAUSE)
     int simu=0;
+    int m_combi_done;
+   std::vector<int> m_combi;
+   std::vector<int> m_combif;
+    std::vector<int> m_tmp;
+    std::string m_nfo;
+
 
 
 public:
@@ -221,6 +252,14 @@ public:
     void simulation();
     //FONCTION DETERMINANT SI LES RESSOURCES SONT SUFFISANTES
     double ressources(double base,double ress);
+    //RESET DE LA COULEUR DES ARCS
+    void resetcol();
+    //JESAISPASENCORE
+    void kco(int k);
+    void recu(int offset,int k);
+    void testconnexite(std::vector<int> v);
+    void algodekco();
+
 };
 
 #endif // GRAPHE_H_INCLUDED

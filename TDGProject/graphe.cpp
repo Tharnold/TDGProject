@@ -1,7 +1,7 @@
 ﻿#include "graphe.h"
 #include <chrono>
 #include <thread>
-
+#include <queue>
 SommetInterface::SommetInterface(int idx, int x, int y, std::string nom_foto, int foto_idx)
 {
     //LA BOITE ENGLOBANTE
@@ -220,19 +220,43 @@ GrapheInterface::GrapheInterface(int x, int y, int w, int h)
     //BOUTON POUR AFFICHER LES COMPOSANTES FORTEMENTS CONNEXES DU GRAPHE ACTIF
     m_tool_box.add_child(m_bouton_forteco);
     m_bouton_forteco.set_frame(3,323,77,40);
-    m_bouton_forteco.set_bg_color(0xB7CA79);
+    m_bouton_forteco.set_bg_color(0x749A6F);
     m_bouton_forteco.add_child(m_bouton_forteco_label);
     m_bouton_forteco_label.set_message("elt.cnx");
 
+    //BOUTON POUR RESET LES COULEURS DES ARCS
+    m_tool_box.add_child(m_bouton_resetcol);
+    m_bouton_resetcol.set_frame(3,363,77,40);
+    m_bouton_resetcol.set_bg_color(0xB7CA79);
+    m_bouton_resetcol.add_child(m_bouton_resetcol_label);
+    m_bouton_resetcol_label.set_message("Reset");
 
+    //BOUTON POUR AFFIVHER L ELEMENT FAIBLE
+    m_tool_box.add_child(m_bouton_kco);
+    m_bouton_kco.set_frame(3,403,77,40);
+    m_bouton_kco.set_bg_color(0x749A6F);
+    m_bouton_kco.add_child(m_bouton_kco_label);
+    m_bouton_kco_label.set_message("k-cnx");
+
+
+}
+void Graphe::resetcol()
+{
+    for (int i=0; i<m_arcs.size(); i++)
+    {
+        m_arcs[i].m_interface->m_top_edge.set_color(GRISSOMBRE);
+    }
 }
 
 void Graphe::lecture(std::string nom)
 {
 
+    m_nfo=nom;
+
     std::string nf;
     nf=nom;
     nf+=".txt";
+
 
     //VALEURS POUR STOCKER LES DONEES DU FICHIER
     m_interface= std::make_shared<GrapheInterface>(50, 0, 750, 600);
@@ -248,7 +272,7 @@ void Graphe::lecture(std::string nom)
     {
         fichier >> nb_sommets;
         fichier >> nb_arretes;
-        std::cout << "recup ordre et tt" << std::endl;
+        // std::cout << "recup ordre et tt" << std::endl;
         m_ordre=nb_sommets;
         m_nbarcs=nb_arretes;
 
@@ -430,6 +454,7 @@ std::vector<int> Graphe::RechercheComposanteFortementConnexe(int s)
             }
         }
         matrice_adjacence[a][b]=1;
+        //matrice_adjacence[b][a]=1;
     }
 
     //INTIALISATIONS DES VECTEURS
@@ -644,7 +669,22 @@ void Graphe::update()
     {
         surbrillance(TouteLesComposantesFortementsConnexes());
     }
+    //SI ON APUIE SUR C-CNX
 
+    if(m_interface->m_bouton_kco.clicked())
+    {
+        algodekco();
+        for(int i=0; i<m_ordre; i++)
+        {
+            for(int j=0; j<m_combif.size(); j++)
+            {
+                if(m_combif[j]==i)
+                {
+                    m_sommets[i].m_interface->m_top_box.set_color(ROUGE);
+                }
+            }
+        }
+    }
     //INDICATION DE SI L ON VEUT SELECTIONNER LE SOMMETS DE DEPART OU D ARRIVEE POUR LA CREATION D UN ARC
     if(m_interface->m_bouton_ajout_sommet1.clicked()&&bol!=1)
     {
@@ -658,28 +698,41 @@ void Graphe::update()
     //PARCOURS DES SOMMETS POUR LES BOUTONS CLICK
     for(int i=0; i<m_sommets.size(); i++)
     {
-
+        //SI ON CLIQUE SUR LE BOUTON SUPPRIMER
         if(m_sommets[i].m_interface->m_bouton_delete.clicked())
         {
+            //ON SUPPRIME LE SOMMET
             suppression_sommet(m_sommets[i].m_index);
         }
+
+        //SI ON CLIQUE SUR LE BONTON "+"
         if(m_sommets[i].m_interface->m_bouton_link.clicked())
         {
             switch(bol)
             {
+            //SI ON A SELECTIONE QU ON VOULAIT SELECTIONNER LE SOMMET DE DEPART
             case 1:
+
+                //ON STOCK LE SOMMET EN QUESTION
                 ss1=m_sommets[i];
                 rest;
+
+            //SI ON A SELECTIONE QU ON VOULAIT SELECTIONNER LE SOMMET D ARRIVEE
             case 2:
+
+                //ON STOCK LE SOMMET EN QUESTION
                 ss2=m_sommets[i];
                 rest;
             }
         }
     }
 
+    //SI ON APPUIE SUR LE BOUTON LINK ET QUE LES SOMMETS DE DEPART ET ARRIVEE SONT DIFFERENTS
     if(m_interface->m_bouton_link.clicked() && ss1.m_index!=ss2.m_index)
     {
         b=0;
+
+        //ON CHERCHE UN INDICE A ATTRIBUER A L ARC QUE L ON VA AJOUTER
         while (b==0)
         {
             for(int i=0; i<m_arcs.size(); i++ )
@@ -696,23 +749,28 @@ void Graphe::update()
 
             }
         }
+
+        //ON CREE L ARC
         add_interfaced_arc(val_ind,ss1.m_index,ss2.m_index);
         m_nbarcs++;
     }
 
-
+    //SI ON CLICK SUR LE BOUTON SAVE
     if (m_interface->m_bouton_save.clicked())
     {
+        //APPEL DE LA FONCTION DE SAUVEGARDE
         std::cout << "Dans quel fichier enregistrer votre graphe ?" << std::endl;
         std::cin >> nom;
         sauvegarde(nom);
     }
 
+    //SI ON CLIQUE SUR LE BOUTON LOAD
     if (m_interface->m_bouton_load.clicked())
     {
         std::cout << "Quel fichier voulez vous load ?" << std::endl;
         std::cin >> nom;
 
+        //ON SUPPRIME TOUTE LES DONEES DU GRAPHE ACTIF
         while (m_arcs.size()>0)
         {
             m_arcs.pop_back();
@@ -721,8 +779,17 @@ void Graphe::update()
         {
             m_sommets.pop_back();
         }
+
+        //ON CHARGE LE NOUVEAU GRAPHE
         lecture(nom);
     }
+    //SI ON CLIQUE SUR LE BOUTON RESET
+    if(m_interface->m_bouton_resetcol.clicked())
+    {
+        resetcol();
+    }
+
+    //SI ON CLIQUE SUR LE BOUTON ADD
     if(m_interface->m_ajouter_sommet.clicked())
     {
         std::cout << std::endl << "----------AJJOUT SOMMET----------" << std::endl << std::endl;
@@ -736,6 +803,7 @@ void Graphe::update()
         std::cout << "Quelle mortalité naturelle ? (double)  ";
         std::cin >> deces;
 
+        //ON CHERCHE UN INDICE A ATTRIBUER AU NOUVEAU SOMMET
         b=0;
         while (b==0)
         {
@@ -751,23 +819,28 @@ void Graphe::update()
                 }
             }
         }
+
+        //AJOUT DU NOUVEAU SOMMET
         add_interfaced_sommet(val_ind,population,300,300,nom,fertilite,deces);
         m_ordre++;
     }
 
+    //SI ON CLIQUE SUR LE BOUTON PLAY
     if(m_interface->m_lancer_simulation.clicked())
-        simu=1;
+        simu=1; //ON LANCE LA SIMULATION
     if(m_interface->m_pause_simulation.clicked())
-        simu=0;
+        simu=0; //ON MET LA SIMULATION EN PAUSE
     if(simu==1)
         simulation();
 
 
-    // supression des arcs
+    //ON PARCOURS LES ARCS
     for(int i=0; i<m_arcs.size(); i++)
     {
+        //SI ON CLIQUE SUR LE BOUTON POUR SUPPRIMER L ARC
         if(m_arcs[i].m_interface->m_bouton_delete.clicked())
         {
+            //ON SUPPRIME L ARC
             m_interface->m_main_box.remove_child(m_arcs[i].m_interface->m_top_edge);
             m_arcs.erase(m_arcs.begin()+i);
             m_nbarcs=m_nbarcs-1;
@@ -784,8 +857,8 @@ void Graphe::suppression_sommet(int indice)
     int done2=0;
     int done=0;
     grman::WidgetBox * pt;
-    //supression de toutes les arretes relie au somet
 
+    //SUPPRESSION DE TOUTES LES ARRETES RELIEES AU SOMMET
     while(done2==0)
     {
         done2=1;
@@ -793,9 +866,7 @@ void Graphe::suppression_sommet(int indice)
         {
             if(m_arcs[i].m_from==indice ||m_arcs[i].m_to==indice )
             {
-                //on suprime l arete i
-                //   std::cout<<"bitocul  "<<m_arcs[i].m_to<<"   " << i<<std::endl;
-                //suppression_arc(i);
+                //ON SUPPRIME L ARETE I SI ELLE EST RELIEE AU SOMMET
                 done2=0;
                 m_interface->m_main_box.remove_child(m_arcs[i].m_interface->m_top_edge);
                 m_arcs.erase(m_arcs.begin()+i);
@@ -803,73 +874,36 @@ void Graphe::suppression_sommet(int indice)
             }
         }
     }
-    //supression du sommet
+
+    //SUPPRESSION DU SOMMET
     for(int i=0; i<m_sommets.size(); i++)
     {
         if(m_sommets[i].m_index==indice && done ==0)
         {
-
-
+            //SUPRESSION DE L INTERfACE DU SOMMET
             m_interface->m_main_box.remove_child(m_sommets[i].m_interface->m_top_box);//copie
-
+            //SUPRESSION DES DONNEE DU SOMMET
             tmp=m_sommets[m_sommets.size()-1];
-
             m_sommets[m_sommets.size()-1] = m_sommets[i];
             m_sommets[i]=tmp;
-
             m_sommets.pop_back();
             m_ordre--;
 
-            done =1;
-        }
-    }
-
-
-
-    // std::cout<<"test"<<std::endl;
-}
-
-void Graphe::suppression_arc(int indice)
-{
-    Arc tmp;
-    int done=0;
-    for(int i=0; i<m_arcs.size(); i++)
-    {
-        if(m_arcs[i].m_indx==indice && done ==0)
-        {
-
-            //m_interface->m_top_box.remove_child(m_arcs[i].m_interface->m_top_edge);
-            // delete &m_arcs[i].m_interface->m_top_edge;
-//           delete m_arcs[i].m_interface;
-
-            m_interface->m_main_box.remove_child(m_arcs[i].m_interface->m_top_edge);//copie
-            //=m_arcs[m_arcs.size()-1];
-
-            // m_arcs[m_arcs.size()-1] = m_arcs[i];
-            // m_arcs[i]=tmp;
-
-            //m_arcs.pop_back();
-            std::cout<< "l arete a ete suprimee indice:"<< i<<std::endl;
-            m_arcs.erase(m_arcs.begin()+i);
-
-
+            //ON INDIQUE QUE LE SOMMET A ETE SUPPRIME
             done =1;
         }
     }
 }
+
 
 
 void Graphe::add_interfaced_sommet(int idx, double valeur, int x, int y, std::string nom_foto, double fertilite, double deces_mois, int foto_idx )
 {
-    /*if ( m_sommets.find(idx)!=m_sommets.end() )
-    {
-        std::cerr << "Error adding sommet at idx=" << idx << " already used..." << std::endl;
-        throw "Error adding sommet";
-    }*/
-    // Creation d'une interface de sommet
+
+    //CREATION D UNE INTERFACE
     SommetInterface *vi = new SommetInterface(idx, x, y, nom_foto, foto_idx);
 
-    // Ajout de la top box de l'interface de sommet
+    //AJOUT DE LA TOPBOX
     m_interface->m_main_box.add_child(vi->m_top_box);
     // On peut ajouter directement des vertices dans la map avec la notation crochet :
     Sommet som_prov(valeur, vi, idx);
@@ -880,7 +914,7 @@ void Graphe::add_interfaced_sommet(int idx, double valeur, int x, int y, std::st
 
 void Graphe::add_interfaced_arc(int idx, int id_som1, int id_som2, double poids)
 {
-
+    //RECUPERATION DES SOMMETS POUR AVOIR LEURS INDICES
     Sommet som1,som2;
     for (int i=0; i<m_sommets.size(); i++)
     {
@@ -890,12 +924,13 @@ void Graphe::add_interfaced_arc(int idx, int id_som1, int id_som2, double poids)
             som2=m_sommets[i];
     }
 
+    //CREATION DE L INTERFACE
     ArcInterface *ei = new ArcInterface(som1,som2);
-
     m_interface->m_main_box.add_child(ei->m_top_edge);
     Arc larc(poids, ei, idx,id_som1,id_som2);
     m_arcs.push_back(larc);
 
+    //AJOUT DANS LES VECTEURS D ARCS DES SOMMETS
     for (int i=0; i<m_sommets.size(); i++)
     {
         if(m_sommets[i].m_index==id_som1)
@@ -907,14 +942,13 @@ void Graphe::add_interfaced_arc(int idx, int id_som1, int id_som2, double poids)
 void Graphe::surbrillance(std::vector<std::vector<int>> tabc)
 {
     std::vector <int> rep;
-    std::vector <int> idxe;//cotient les indice des sommets appartenant a uen composante fortement connexe
+    std::vector <int> idxe;//CONTIENT LES INDICES DES SOMMETS APPARTENANT A UNE COMPOSANTE FORTEMENT CONNEXE
     std::vector<int> colou;
     int cola=0;
     int mf,mt;
     colou.push_back(ROUGE);
     colou.push_back(ROSE);
     colou.push_back(VIOLET);
-
     colou.push_back(VERT);
     colou.push_back(CYAN);
     colou.push_back(BLEU);
@@ -922,6 +956,10 @@ void Graphe::surbrillance(std::vector<std::vector<int>> tabc)
     colou.push_back(JAUNE);
     colou.push_back(NOIR);
     colou.push_back(VERTFLUOSOMBRE);
+    //ON RESET LES COULEURS DES ARCS
+    resetcol();
+
+    //ON INDIQUE A QUELLE COMPOSANTE FROTEMENT CONNEXE APPARTIENT CHAQUE SOMMET
     for(int i=0; i<tabc.size(); i++)
     {
         for(int j=0; j<tabc[i].size(); j++)
@@ -933,10 +971,10 @@ void Graphe::surbrillance(std::vector<std::vector<int>> tabc)
         }
     }
 
-    //LA NORMALEMENT C BON CHAQUE SOMMET A UNE COULEUR L ASSOCIANT A UE COMPOSANTE FORTEMENT CONNEXE
+    //ON PARCOURS LES ARCS
     for(int i=0; i<m_arcs.size(); i++)
     {
-        //boucle pour choper from
+        //ON CHERCHE A QUELLE COMPOSANTE FORTEMENT CONNECTE APPARTIENT LE SOMMET DE DEPART DE L ARC
         for(int f=0; f<m_sommets.size(); f++)
         {
             if(m_sommets[f].m_index==m_arcs[i].m_from)
@@ -947,7 +985,7 @@ void Graphe::surbrillance(std::vector<std::vector<int>> tabc)
             }
         }
 
-        //boucle pour choper to
+        //ON CHERCHE A QUELLE COMPOSANTE FORTEMENT CONNECTE APPARTIENT LE SOMMET D ARRIVEE DE L ARC
         for(int f=0; f<m_sommets.size(); f++)
         {
             if(m_sommets[f].m_index==m_arcs[i].m_to)
@@ -956,10 +994,193 @@ void Graphe::surbrillance(std::vector<std::vector<int>> tabc)
 
             }
         }
+
+        //SI L ARC RELIE DEUX SOMMETS DE LA MEME COMPOSANTES FORTEMENT CONNEXE
         if(mf==mt)
         {
+            //ON LE COLORIE DE LA MEME COULEUR QUE LES ARCS RELIANT DES SOMMETS APPARTENANT A LA MEME COMPOSANTE FORTEMENT CONNEXE ENTRE EUX
             m_arcs[i].m_interface->m_top_edge.set_color(colou[mf]);
 
         }
     }
 }
+void Graphe::algodekco()
+{
+    m_combi_done=0;
+    int t=0;
+    for(int i=1; i<m_ordre; i++)
+    {
+
+        while(m_tmp.size()>0)
+        {
+            m_tmp.pop_back();
+        }
+        while(m_combi.size()>0)
+        {
+            m_combi.pop_back();
+        }
+
+        kco(i);
+    }
+}
+
+void Graphe::kco(int k) // equivalent de son main
+{
+
+    for(int i=0; i<m_ordre; i++)
+    {
+        m_tmp.push_back(i);
+    }
+    recu(0,k);
+}
+
+void Graphe::recu(int offset,int k)
+{
+
+
+    if(k==0)
+    {
+        testconnexite(m_combi);
+        return;
+    }
+    for(int i=offset; i<m_tmp.size(); i++)
+    {
+        m_combi.push_back(m_tmp[i]);
+        recu(i+1,k-1);
+        m_combi.pop_back();
+    }
+
+
+
+
+}
+
+void Graphe::testconnexite(std::vector<int> v)
+{
+    std::vector<std::vector<int>> matrice_adjacence;
+    std::vector<int>jve;
+    std::vector<int>tmp;
+    std::vector<int>pred;
+    std::vector<int> marques;
+    std::queue<int> file;
+    int a,b;
+    int x=0;
+
+    for(int i=0; i<v.size(); i++)
+    {
+        jve.push_back(m_sommets[v[i]].m_index);
+    }
+    for(int i=0; i<jve.size(); i++)
+    {
+        suppression_sommet(jve[i]);
+
+    }
+    //BFS
+    //INITIALISATION DE LA MATRICE D ADJACENCE
+    for(int j=0; j<m_ordre; j++)
+    {
+        tmp.push_back(0);
+    }
+    for(int i=0; i<m_ordre; i++)
+    {
+        matrice_adjacence.push_back(tmp);
+    }
+
+    //REMPLISSAGE DE LA MATRICE D ADJACENCE.
+    for(int i=0; i<m_arcs.size(); i++)
+    {
+        for(int j=0; j<m_sommets.size(); j++)
+        {
+            if(m_sommets[j].m_index==m_arcs[i].m_from)
+            {
+                a=j;
+            }
+        }
+
+        for(int t=0; t<m_sommets.size(); t++)
+        {
+            if(m_sommets[t].m_index==m_arcs[i].m_to)
+            {
+                b=t;
+            }
+        }
+        matrice_adjacence[a][b]=1;
+        matrice_adjacence[b][a]=1;
+    }
+    //initialisation de pred
+    for (int i=0; i<m_ordre; i++)
+    {
+        pred.push_back(0);
+    }
+    // c pour du beure
+    for(int i=0; i<matrice_adjacence.size(); i++)
+    {
+        for(int j=0; j<matrice_adjacence[i].size(); j++)
+        {
+            if(matrice_adjacence[i][j]==1)
+            {
+                x=i;
+                i=matrice_adjacence.size()-1;
+                j=i;
+            }
+        }
+
+    }
+
+    //INIT MARQUES
+    for(int i=0; i<m_ordre; i++)
+    {
+        marques.push_back(0);
+    }
+    //SELECTION SUN SOMMET INITIAL
+    file.push(x);
+    marques[x]=1;
+    //
+    while(!file.empty())
+    {
+        x=file.front();
+        file.pop();
+        for(int y=0; y<m_ordre; y++)
+        {
+            if( (matrice_adjacence[x][y]==1|| matrice_adjacence[y][x]==1 )  && marques[y]==0)
+            {
+                marques[y]=1;
+                file.push(y);
+                pred[y]=x;
+            }
+        }
+    }
+
+    for(int i=0; i<marques.size(); i++)
+    {
+        if(marques[i]==0 && m_combi_done==0)
+        {
+            m_combif=v;
+            m_combi_done=1;
+        }
+    }
+
+
+
+    /*bail daffichage de toute les possibilite
+    static int count = 0;
+    std::cout << "combination no " << (++count) << ": [ ";
+    for (int i = 0; i < v.size(); ++i)
+    {
+        std::cout << v[i] << " ";
+    }
+    std::cout << "] " << std::endl;
+     */
+    while (m_arcs.size()>0)
+    {
+        m_arcs.pop_back();
+    }
+    while (m_sommets.size()>0)
+    {
+        m_sommets.pop_back();
+    }
+
+    lecture(m_nfo);
+}
+
+///FIN
