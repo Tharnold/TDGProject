@@ -196,6 +196,11 @@ private:
     grman::WidgetButton m_bouton_kco;
     grman::WidgetText m_bouton_kco_label;
 
+    //BOUTON POUR SELECTIONNER LES SOMMETS A ETUDIER LORS DE LA SIMU
+    grman::WidgetButton m_bouton_simsel;
+    grman::WidgetText m_bouton_simsel_label;
+
+
 
 
 public:
@@ -217,14 +222,22 @@ private:
     //RETENUE D'UN SOMMET POUR SUPPRESSION OU CREATION D'UN ARC
     Sommet ss1;
     Sommet ss2;
+    Sommet ss3;
+    Sommet ss4;
     int bol;
     //BOOLEEN INDIQUANT SI LA SIMULATION TOURNE OU NON(GESTION DE LA PAUSE)
     int simu=0;
     int m_combi_done;
+      int mois=0;
+      int boolsimsel=0;
+      BITMAP* kurb;
+
+
    std::vector<int> m_combi;
    std::vector<int> m_combif;
     std::vector<int> m_tmp;
     std::string m_nfo;
+      std::string m_nfsim="simu.txt";
 
 
 
@@ -263,6 +276,7 @@ public:
     void testconnexite(std::vector<int> v);
     void algodekco();
     int ressources(int base,int ress);
+    void generation_kurb();
     //QUITTER
     int QUIT();
 };

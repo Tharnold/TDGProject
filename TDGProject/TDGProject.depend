@@ -160,7 +160,7 @@
 	<iostream>
 	"graphe.h"
 
-1523183364 c:\users\hp\tdgproject\tdgproject\graphe.h
+1523207485 c:\users\hp\tdgproject\tdgproject\graphe.h
 	<vector>
 	<map>
 	<string>
@@ -169,7 +169,8 @@
 	<iostream>
 	"grman/grman.h"
 
-1523195938 source:c:\users\hp\tdgproject\tdgproject\graphe.cpp
+1523209457 source:c:\users\hp\tdgproject\tdgproject\graphe.cpp
+	<allegro.h>
 	<chrono>
 	<thread>
 	<queue>

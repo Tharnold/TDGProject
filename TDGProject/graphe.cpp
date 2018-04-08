@@ -1,4 +1,5 @@
 ﻿#include "graphe.h"
+#include <allegro.h>
 #include <chrono>
 #include <thread>
 #include <queue>
@@ -235,10 +236,18 @@ GrapheInterface::GrapheInterface(int x, int y, int w, int h)
     m_bouton_kco.add_child(m_bouton_kco_label);
     m_bouton_kco_label.set_message("k-cnx");
 
+    //BOUTON SELECT SIMU
+    m_tool_box.add_child(m_bouton_simsel);
+    m_bouton_simsel.set_frame(3,443,77,40);
+    m_bouton_simsel.set_bg_color(0xB7CA79);
+    m_bouton_simsel.add_child(m_bouton_simsel_label);
+    m_bouton_simsel_label.set_message("simsel");
+
+
     //BOUTON QUITTER
     m_tool_box.add_child(m_bouton_quit);
-    m_bouton_quit.set_frame(3,443,77,40);
-    m_bouton_quit.set_bg_color(0xB7CA79);
+    m_bouton_quit.set_frame(3,483,77,40);
+    m_bouton_quit.set_bg_color(0x749A6F);
     m_bouton_quit.add_child(m_bouton_quit_label);
     m_bouton_quit_label.set_message("Quit");
 
@@ -341,6 +350,59 @@ void Graphe::sauvegarde(std::string nom)
         }
     }
 }
+void Graphe::generation_kurb()
+{
+    //allegro_init();
+    //install_keyboard();
+    //BITMAP* buffer;
+
+    /*set_color_depth(desktop_color_depth());
+    if (set_gfx_mode(GFX_AUTODETECT_WINDOWED,1280,720,0,0)!=0)
+    {
+        allegro_message("prb gfx mode");
+        allegro_exit();
+        exit(EXIT_FAILURE);
+    }*/
+    //buffer=create_bitmap()
+    kurb=create_bitmap(480,300);
+    rectfill(kurb,0,0,480,300,BLANC);
+    int x1,x2,t;
+    t=0;
+    int x1b,x2b,tb;
+    int is1,is2;
+    std::vector<int> v_s1(12,0);
+        std::vector<int> v_s2(12,0);
+        std::ifstream fichier (m_nfsim);
+        if(fichier)
+        {
+            fichier >>is1;
+            fichier >>is2;
+            for(int i=0;i<12;i++)
+            {
+                fichier >> v_s1[i];
+                fichier >> v_s2[i];
+            }
+        }
+        //construction de la bitmap
+        for(int i=0;i<11;i++)
+        {
+            x1=v_s1[i];
+            x2=v_s2[i];
+            x1b=v_s1[i+1];
+            x2b=v_s2[i+1];
+            tb=t+40;
+            // relier les deux points
+        line(kurb,t,300-2*x1,tb,300-2*x1b,ROUGE);
+         line(kurb,t,300-2*x2,tb,300-2*x2b,BLEU);
+            t=t+40;
+        }
+        save_bitmap("graphique.bmp",kurb,NULL);
+        //allegro_exit();
+
+
+
+
+}
 
 void Graphe::simulation()
 {
@@ -353,7 +415,34 @@ void Graphe::simulation()
     int som=0;
     int rarc=0;
     double pds=0;
+    int idxs3=0;
+    int idxs4=0;
+    //ouvrirel e fichier paske sinon j vais  oulier et recuo le valuers de s 3 et s4
+    for(int i=0;i<m_ordre;i++)
+    {
+        if(m_sommets[i].m_index==ss3.m_index)
+        {
+            idxs3=m_sommets[i].m_valeur;
+        }
+        if(m_sommets[i].m_index==ss4.m_index)
+        {
+            idxs4=m_sommets[i].m_valeur;
+        }
+    }
+    std::ofstream fichier (m_nfsim,std::ios::app);
+    if (fichier && mois<12)
+    {
 
+         fichier << idxs3<< " "<< idxs4 << "\n";
+    }
+    if(mois>=12)
+    {
+        simu=0;
+        generation_kurb();
+        mois=0;
+    }
+
+   mois++;
     //PARCOURS DE TOUS LES SOMMETS POUR LEUR MISE A JOUR
     for (int i=0; i<m_sommets.size(); i++)
     {
@@ -691,6 +780,25 @@ void Graphe::update()
         //elt.second.post_update();
         elt.post_update();
 
+
+        //APPUIE SUR SIMSEL
+    if(m_interface->m_bouton_simsel.clicked())
+    {
+       if(boolsimsel==0)
+       {
+           boolsimsel=1;
+           ss3=ss1;
+           ss4=ss2;
+           m_interface->m_bouton_simsel.set_bg_color(0xcab579);
+       }
+       else if(boolsimsel==1)
+       {
+           boolsimsel=0;
+            m_interface->m_bouton_simsel.set_bg_color(0xB7CA79);
+
+       }
+    }
+
     //AFFICHAGE DES COMPOSANTES FORTEMENTS CONNEXES
     if(m_interface->m_bouton_forteco.clicked())
     {
@@ -869,7 +977,18 @@ void Graphe::update()
 
     //SI ON CLIQUE SUR LE BOUTON PLAY
     if(m_interface->m_lancer_simulation.clicked())
+    {
         simu=1; //ON LANCE LA SIMULATION
+        std::ofstream fichier_simu(m_nfsim,std::ios::trunc);
+        if(fichier_simu)
+        {
+            fichier_simu << ss3.m_index <<" "<<ss4.m_index<<"\n";
+
+
+        }
+    }
+
+
     if(m_interface->m_pause_simulation.clicked())
         simu=0; //ON MET LA SIMULATION EN PAUSE
     if(simu==1)
