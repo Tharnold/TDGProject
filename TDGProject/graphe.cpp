@@ -72,7 +72,7 @@ void Sommet::pre_update()
     m_interface->m_slider_value.set_value(m_fertilite);
 
     //MAJ DE L AFFICHAGE DE LA VALEUR DU SLIDER
-    m_interface->m_label_value.set_message( std::to_string( (int)m_fertilite) );
+    m_interface->m_label_value.set_message( std::to_string( m_fertilite) );
     m_interface->m_label_pop.set_message(std::to_string((int)m_valeur));
 }
 
@@ -83,7 +83,7 @@ void Sommet::post_update()
         return;
 
     //MAJ DE LA VALEUR ASSOCIEE AU SLIDER
-    m_fertilite = m_interface->m_slider_value.get_value();
+    //m_fertilite = m_interface->m_slider_value.get_value();
 }
 
 ArcInterface::ArcInterface(Sommet& from, Sommet& to)
@@ -317,38 +317,57 @@ void Graphe::sauvegarde(std::string nom)
 void Graphe::simulation()
 {
     //POPULATION PENDANT LA MISE A JOUR
-    double popu=0;
+    int popu=0;
     //NOMBRE D'INDIVIDUS MORTS DE PREDATEURS
-    double eaten=0;
+    int eaten=0;
     //NOMBRE DE RESSOURCES
-    double eat=0;
+    int eat=0;
     int som=0;
     int rarc=0;
-    double pds=0;
+    int pds=0;
 
     //PARCOURS DE TOUS LES SOMMETS POUR LEUR MISE A JOUR
     for (int i=0; i<m_sommets.size(); i++)
     {
+        //RAZ
+        popu=0;
+        eaten=0;
+        eat=0;
+        som=0;
+        rarc=0;
+        pds=0;
+        std::cout << "----------SOMMET "<< i << " ----------\n";
         //CALCUL DE LA POPULATION AU TEMPS T+1
         popu=m_sommets[i].m_valeur;
+        std::cout << "m_valeur = " << popu<< std::endl;
         popu+=m_sommets[i].m_valeur*(m_sommets[i].m_fertilite-m_sommets[i].m_deces_mois);
-
+        std::cout << "m_valeur fertmort = " << popu<< std::endl;
         ///RECUPERATION DES ARCS INCIDENTS POUR AVOIR LA QUANTITE DE PREDATEURS ET DE PROIES
         //RECUPERATION DES PREDATEURS
+        std::cout << "LA CHATTE A TA MERE =   " << m_sommets[i].m_in.size() << std::endl;
         for(int j=0; j<m_sommets[i].m_in.size(); j++)
         {
+            std::cout<<"bite\n";
             for(int k=0; k<m_sommets.size(); k++)
             {
                 for(int l=0; l<m_arcs.size(); l++)
                 {
-                    if(m_arcs[l].m_indx==j)
+                    if(m_arcs[l].m_indx==m_sommets[i].m_in[j])
+                    {
                         rarc=m_arcs[l].m_from;
-                    pds=m_arcs[l].m_poids;
+                        std::cout << "m_from =  " << rarc << std::endl;
+                        pds=m_arcs[l].m_poids;
+                        std::cout << "m_poids =  " << pds << std::endl;
+                    }
                 }
                 if(m_sommets[k].m_index==rarc)
+                {
                     som=k;
+                    std::cout << "Le sommet est =  " << som << std::endl;
+                }
             }
             eaten+=pds*m_sommets[som].m_valeur;
+            std::cout << "Eaten =   " << eaten << std::endl;
         }
 
         //RECUPERATION DES PROIES(RESSOURCES)
@@ -358,19 +377,30 @@ void Graphe::simulation()
             {
                 for(int l=0; l<m_arcs.size(); l++)
                 {
-                    if(m_arcs[l].m_indx==j)
+                    if(m_arcs[l].m_indx==m_sommets[i].m_out[j])
+                    {
                         rarc=m_arcs[l].m_to;
-                    pds=m_arcs[l].m_poids;
+                        std::cout << "m_to =  " << rarc << std::endl;
+                        pds=m_arcs[l].m_poids;
+                        std::cout << "m_poids =  " << pds << std::endl;
+                    }
                 }
                 if(m_sommets[k].m_index==rarc)
+                {
                     som=k;
+                    std::cout << "Le sommet est =  " << som << std::endl;
+                }
             }
-            eat+=pds*m_sommets[som].m_valeur;
+            eat+=m_sommets[som].m_valeur/pds;
+            std::cout << "Eat =   " << eat << std::endl;
         }
 
         popu-=eaten;
+        std::cout << "popu-=eaten =    " << popu << std::endl;
         //VERIFICATION DES MORTS PAR MANQUE DE NOURRITURE
-        popu=ressources(popu,eat);
+        if(eat!=0)
+            popu=ressources(popu,eat);
+        //std::cout << "popu-=eaten =    " << popu << std::endl;
         if(popu<0)
             popu=0;
         m_sommets[i].m_valeur=popu;
@@ -381,7 +411,7 @@ void Graphe::simulation()
 }
 
 //VERIFICATION SI LES RESSOURCES SONT SUFFISANTES
-double Graphe::ressources(double base,double ress)
+int Graphe::ressources(int base,int ress)
 {
     if(base>ress)
         return base-(base-ress)*0.75;

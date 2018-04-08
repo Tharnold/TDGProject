@@ -1,0 +1,6 @@
+4
+0
+0 3 514 35 lion.png 0 0
+1 25 178 59 gazelle.png 0 0
+2 50 282 314 herbe.png 0 0
+3 10 654 396 scarabe.png 0 0
