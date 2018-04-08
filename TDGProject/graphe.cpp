@@ -352,52 +352,59 @@ void Graphe::sauvegarde(std::string nom)
 }
 void Graphe::generation_kurb()
 {
-    //allegro_init();
-    //install_keyboard();
-    //BITMAP* buffer;
-
-    /*set_color_depth(desktop_color_depth());
-    if (set_gfx_mode(GFX_AUTODETECT_WINDOWED,1280,720,0,0)!=0)
-    {
-        allegro_message("prb gfx mode");
-        allegro_exit();
-        exit(EXIT_FAILURE);
-    }*/
-    //buffer=create_bitmap()
     kurb=create_bitmap(480,300);
     rectfill(kurb,0,0,480,300,BLANC);
     int x1,x2,t;
     t=0;
     int x1b,x2b,tb;
+
     int is1,is2;
     std::vector<int> v_s1(12,0);
-        std::vector<int> v_s2(12,0);
-        std::ifstream fichier (m_nfsim);
-        if(fichier)
+    std::vector<int> v_s2(12,0);
+    std::ifstream fichier (m_nfsim);
+    if(fichier)
+    {
+        fichier >>is1;
+        fichier >>is2;
+        for(int i=0; i<12; i++)
         {
-            fichier >>is1;
-            fichier >>is2;
-            for(int i=0;i<12;i++)
-            {
-                fichier >> v_s1[i];
-                fichier >> v_s2[i];
-            }
+            fichier >> v_s1[i];
+            fichier >> v_s2[i];
         }
-        //construction de la bitmap
-        for(int i=0;i<11;i++)
+    }
+    for(int i=0;i<m_sommets.size();i++)
+    {
+        if(m_sommets[i].m_index==is1)
         {
-            x1=v_s1[i];
-            x2=v_s2[i];
-            x1b=v_s1[i+1];
-            x2b=v_s2[i+1];
-            tb=t+40;
-            // relier les deux points
+
+            textprintf_ex(kurb,font,320,5,ROUGE,BLANC,m_sommets[i].m_interface->m_img.get_pic_name().c_str());
+        }
+        if(m_sommets[i].m_index==is2)
+        {
+
+            textprintf_ex(kurb,font,320,25,BLEU,BLANC,m_sommets[i].m_interface->m_img.get_pic_name().c_str());
+        }
+    }
+    textprintf_ex(kurb,font,110,290,NOIR,BLANC,"3 mois");
+    textprintf_ex(kurb,font,230,290,NOIR,BLANC,"6 mois");
+    textprintf_ex(kurb,font,350,290,NOIR,BLANC,"9 mois");
+    textprintf_ex(kurb,font,5,196,NOIR,BLANC,"50");
+    textprintf_ex(kurb,font,5,98,NOIR,BLANC,"100");
+    //construction de la bitmap
+    for(int i=0; i<11; i++)
+    {
+        x1=v_s1[i];
+        x2=v_s2[i];
+        x1b=v_s1[i+1];
+        x2b=v_s2[i+1];
+        tb=t+40;
+        // relier les deux points
         line(kurb,t,300-2*x1,tb,300-2*x1b,ROUGE);
-         line(kurb,t,300-2*x2,tb,300-2*x2b,BLEU);
-            t=t+40;
-        }
-        save_bitmap("graphique.bmp",kurb,NULL);
-        //allegro_exit();
+        line(kurb,t,300-2*x2,tb,300-2*x2b,BLEU);
+        t=t+40;
+    }
+    save_bitmap("graphique.bmp",kurb,NULL);
+    //allegro_exit();
 
 
 
@@ -418,7 +425,7 @@ void Graphe::simulation()
     int idxs3=0;
     int idxs4=0;
     //ouvrirel e fichier paske sinon j vais  oulier et recuo le valuers de s 3 et s4
-    for(int i=0;i<m_ordre;i++)
+    for(int i=0; i<m_ordre; i++)
     {
         if(m_sommets[i].m_index==ss3.m_index)
         {
@@ -433,7 +440,7 @@ void Graphe::simulation()
     if (fichier && mois<12)
     {
 
-         fichier << idxs3<< " "<< idxs4 << "\n";
+        fichier << idxs3<< " "<< idxs4 << "\n";
     }
     if(mois>=12)
     {
@@ -442,7 +449,7 @@ void Graphe::simulation()
         mois=0;
     }
 
-   mois++;
+    mois++;
     //PARCOURS DE TOUS LES SOMMETS POUR LEUR MISE A JOUR
     for (int i=0; i<m_sommets.size(); i++)
     {
@@ -783,22 +790,22 @@ void Graphe::update()
         elt.post_update();
 
 
-        //APPUIE SUR SIMSEL
+    //APPUIE SUR SIMSEL
     if(m_interface->m_bouton_simsel.clicked())
     {
-       if(boolsimsel==0)
-       {
-           boolsimsel=1;
-           ss3=ss1;
-           ss4=ss2;
-           m_interface->m_bouton_simsel.set_bg_color(0xcab579);
-       }
-       else if(boolsimsel==1)
-       {
-           boolsimsel=0;
+        if(boolsimsel==0)
+        {
+            boolsimsel=1;
+            ss3=ss1;
+            ss4=ss2;
+            m_interface->m_bouton_simsel.set_bg_color(0xcab579);
+        }
+        else if(boolsimsel==1)
+        {
+            boolsimsel=0;
             m_interface->m_bouton_simsel.set_bg_color(0xB7CA79);
 
-       }
+        }
     }
 
     //AFFICHAGE DES COMPOSANTES FORTEMENTS CONNEXES
@@ -868,14 +875,14 @@ void Graphe::update()
     //SI ON APPUIE SUR LE BOUTON LINK ET QUE LES SOMMETS DE DEPART ET ARRIVEE SONT DIFFERENTS
     if(m_interface->m_bouton_link.clicked() && ss1.m_index!=ss2.m_index )
     {
-         b=0;
-         a=0;
-        for(int i=0;i<m_arcs.size();i++)
+        b=0;
+        a=0;
+        for(int i=0; i<m_arcs.size(); i++)
         {
             if((m_arcs[i].m_from== ss1.m_index && m_arcs[i].m_to== ss2.m_index ) || (m_arcs[i].m_from== ss2.m_index && m_arcs[i].m_to== ss1.m_index ))
             {
 
-              a=1;
+                a=1;
             }
         }
 
@@ -901,8 +908,8 @@ void Graphe::update()
         //ON CREE L ARC
         if(a==0)
         {
-             add_interfaced_arc(val_ind,ss1.m_index,ss2.m_index);
-        m_nbarcs++;
+            add_interfaced_arc(val_ind,ss1.m_index,ss2.m_index);
+            m_nbarcs++;
         }
 
     }
