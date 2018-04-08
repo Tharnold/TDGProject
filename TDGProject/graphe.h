@@ -223,9 +223,13 @@ public:
     //SIMULATION DE L'EVOLUTION DES POPULATIONS DANS LE TEMPS
     void simulation();
     //FONCTION DETERMINANT SI LES RESSOURCES SONT SUFFISANTES
+<<<<<<< HEAD
     double ressources(double base,double ress);
     //QUITTER
     int QUIT();
+=======
+    int ressources(int base,int ress);
+>>>>>>> 0dddab38295c3bf293f8b4ee15fe3bc1106f6304
 };
 
 #endif // GRAPHE_H_INCLUDED
