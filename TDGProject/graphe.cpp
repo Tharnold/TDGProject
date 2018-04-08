@@ -265,7 +265,7 @@ void Graphe::lecture(std::string nom)
             fichier >> nom_foto;
             fichier >> fertilite;
             fichier >> deces;
-            add_interfaced_sommet(idx,val,x,y,nom_foto);
+            add_interfaced_sommet(idx,val,x,y,nom_foto,fertilite,deces);
         }
 
         //RECUPERATION DES VALEURS DES ARCS
@@ -342,6 +342,9 @@ void Graphe::simulation()
         //CALCUL DE LA POPULATION AU TEMPS T+1
         popu=m_sommets[i].m_valeur;
         popu+=m_sommets[i].m_valeur*(m_sommets[i].m_fertilite-m_sommets[i].m_deces_mois);
+        std::cout << "FERTILITE ===   " << m_sommets[i].m_fertilite << std::endl;
+        std::cout << "MORT ===   " << m_sommets[i].m_deces_mois << std::endl;
+        std::cout << "foisveleur   " << m_sommets[i].m_valeur*(m_sommets[i].m_fertilite-m_sommets[i].m_deces_mois) << std::endl;
         ///RECUPERATION DES ARCS INCIDENTS POUR AVOIR LA QUANTITE DE PREDATEURS ET DE PROIES
         //RECUPERATION DES PREDATEURS
         for(int j=0; j<m_sommets[i].m_in.size(); j++)
