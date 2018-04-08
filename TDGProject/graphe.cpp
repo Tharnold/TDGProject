@@ -145,16 +145,16 @@ void Arc::post_update()
 GrapheInterface::GrapheInterface(int x, int y, int w, int h)
 {
     //INITIALISATION DE LA BOITE ENGLOBANT TOUT L INTERFACE
-     m_top_box.set_dim(790,590);
+    m_top_box.set_dim(1000,740);
     m_top_box.set_gravity_xy(grman::GravityX::Right, grman::GravityY::Up);
 
     m_top_box.add_child(m_tool_box);
-    m_tool_box.set_dim(90,590);
+    m_tool_box.set_dim(90,720);
     m_tool_box.set_gravity_xy(grman::GravityX::Left, grman::GravityY::Up);
     m_tool_box.set_bg_color(BLANCBLEU);
 
     m_top_box.add_child(m_main_box);
-    m_main_box.set_dim(700,590);
+    m_main_box.set_dim(908,720);
     m_main_box.set_gravity_xy(grman::GravityX::Right, grman::GravityY::Up);
     m_main_box.set_bg_color(0xFFF8DC);
 
@@ -217,7 +217,7 @@ GrapheInterface::GrapheInterface(int x, int y, int w, int h)
     //BOUTON POUR AFFICHER LES COMPOSANTES FORTEMENTS CONNEXES DU GRAPHE ACTIF
     m_tool_box.add_child(m_bouton_forteco);
     m_bouton_forteco.set_frame(3,323,77,40);
-    m_bouton_forteco.set_bg_color(0xB7CA79);
+    m_bouton_forteco.set_bg_color(0x749A6F);
     m_bouton_forteco.add_child(m_bouton_forteco_label);
     m_bouton_forteco_label.set_message("elt.cnx");
 
