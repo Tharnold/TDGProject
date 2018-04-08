@@ -72,7 +72,7 @@ void Sommet::pre_update()
     m_interface->m_slider_value.set_value(m_fertilite);
 
     //MAJ DE L AFFICHAGE DE LA VALEUR DU SLIDER
-    m_interface->m_label_value.set_message( std::to_string( (int)m_fertilite) );
+    m_interface->m_label_value.set_message( std::to_string( m_fertilite) );
     m_interface->m_label_pop.set_message(std::to_string((int)m_valeur));
 }
 
@@ -83,7 +83,7 @@ void Sommet::post_update()
         return;
 
     //MAJ DE LA VALEUR ASSOCIEE AU SLIDER
-    m_fertilite = m_interface->m_slider_value.get_value();
+    //m_fertilite = m_interface->m_slider_value.get_value();
 }
 
 ArcInterface::ArcInterface(Sommet& from, Sommet& to)
@@ -147,15 +147,12 @@ GrapheInterface::GrapheInterface(int x, int y, int w, int h)
     //INITIALISATION DE LA BOITE ENGLOBANT TOUT L INTERFACE
     m_top_box.set_dim(1000,740);
     m_top_box.set_gravity_xy(grman::GravityX::Right, grman::GravityY::Up);
-    m_top_box.set_bg_color(BLANCJAUNE);
 
-    //AJOUT DE LA BOITE D OUTILS
     m_top_box.add_child(m_tool_box);
-    m_tool_box.set_dim(80,720);
+    m_tool_box.set_dim(90,720);
     m_tool_box.set_gravity_xy(grman::GravityX::Left, grman::GravityY::Up);
     m_tool_box.set_bg_color(BLANCBLEU);
 
-    //AJOUT DE LA BOITE OU AFFICHER LE GRAPHE
     m_top_box.add_child(m_main_box);
     m_main_box.set_dim(908,720);
     m_main_box.set_gravity_xy(grman::GravityX::Right, grman::GravityY::Up);
@@ -238,6 +235,13 @@ GrapheInterface::GrapheInterface(int x, int y, int w, int h)
     m_bouton_kco.add_child(m_bouton_kco_label);
     m_bouton_kco_label.set_message("k-cnx");
 
+    //BOUTON QUITTER
+    m_tool_box.add_child(m_bouton_quit);
+    m_bouton_quit.set_frame(3,443,77,40);
+    m_bouton_quit.set_bg_color(0xB7CA79);
+    m_bouton_quit.add_child(m_bouton_quit_label);
+    m_bouton_quit_label.set_message("Quit");
+
 
 }
 void Graphe::resetcol()
@@ -286,7 +290,7 @@ void Graphe::lecture(std::string nom)
             fichier >> nom_foto;
             fichier >> fertilite;
             fichier >> deces;
-            add_interfaced_sommet(idx,val,x,y,nom_foto);
+            add_interfaced_sommet(idx,val,x,y,nom_foto,fertilite,deces);
         }
 
         //RECUPERATION DES VALEURS DES ARCS
@@ -341,11 +345,11 @@ void Graphe::sauvegarde(std::string nom)
 void Graphe::simulation()
 {
     //POPULATION PENDANT LA MISE A JOUR
-    double popu=0;
+    int popu=0;
     //NOMBRE D'INDIVIDUS MORTS DE PREDATEURS
-    double eaten=0;
+    int eaten=0;
     //NOMBRE DE RESSOURCES
-    double eat=0;
+    int eat=0;
     int som=0;
     int rarc=0;
     double pds=0;
@@ -353,10 +357,19 @@ void Graphe::simulation()
     //PARCOURS DE TOUS LES SOMMETS POUR LEUR MISE A JOUR
     for (int i=0; i<m_sommets.size(); i++)
     {
+        //RAZ
+        popu=0;
+        eaten=0;
+        eat=0;
+        som=0;
+        rarc=0;
+        pds=0;
         //CALCUL DE LA POPULATION AU TEMPS T+1
         popu=m_sommets[i].m_valeur;
         popu+=m_sommets[i].m_valeur*(m_sommets[i].m_fertilite-m_sommets[i].m_deces_mois);
-
+        std::cout << "FERTILITE ===   " << m_sommets[i].m_fertilite << std::endl;
+        std::cout << "MORT ===   " << m_sommets[i].m_deces_mois << std::endl;
+        std::cout << "foisveleur   " << m_sommets[i].m_valeur*(m_sommets[i].m_fertilite-m_sommets[i].m_deces_mois) << std::endl;
         ///RECUPERATION DES ARCS INCIDENTS POUR AVOIR LA QUANTITE DE PREDATEURS ET DE PROIES
         //RECUPERATION DES PREDATEURS
         for(int j=0; j<m_sommets[i].m_in.size(); j++)
@@ -365,16 +378,21 @@ void Graphe::simulation()
             {
                 for(int l=0; l<m_arcs.size(); l++)
                 {
-                    if(m_arcs[l].m_indx==j)
+                    if(m_arcs[l].m_indx==m_sommets[i].m_in[j])
+                    {
                         rarc=m_arcs[l].m_from;
-                    pds=m_arcs[l].m_poids;
+                        pds=m_arcs[l].m_poids;
+                    }
                 }
                 if(m_sommets[k].m_index==rarc)
+                {
                     som=k;
+                }
             }
             eaten+=pds*m_sommets[som].m_valeur;
         }
-
+        pds=0;
+        eat=0;
         //RECUPERATION DES PROIES(RESSOURCES)
         for(int j=0; j<m_sommets[i].m_out.size(); j++)
         {
@@ -382,28 +400,37 @@ void Graphe::simulation()
             {
                 for(int l=0; l<m_arcs.size(); l++)
                 {
-                    if(m_arcs[l].m_indx==j)
+                    if(m_arcs[l].m_indx==m_sommets[i].m_out[j])
+                    {
                         rarc=m_arcs[l].m_to;
-                    pds=m_arcs[l].m_poids;
+                        pds=m_arcs[l].m_poids;
+                    }
                 }
                 if(m_sommets[k].m_index==rarc)
+                {
                     som=k;
+                }
             }
-            eat+=pds*m_sommets[som].m_valeur;
+            if(pds!=0)
+                eat+=m_sommets[som].m_valeur/pds;
+            else
+                eat+=10000000;
         }
-
         popu-=eaten;
         //VERIFICATION DES MORTS PAR MANQUE DE NOURRITURE
-        popu=ressources(popu,eat);
+        if(eat>=0)
+            popu=ressources(popu,eat);
         if(popu<0)
             popu=0;
         m_sommets[i].m_valeur=popu;
         std::cout << "popu : " << popu << " /   i :   " << i << std::endl;
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+
     }
 }
 
 //VERIFICATION SI LES RESSOURCES SONT SUFFISANTES
-double Graphe::ressources(double base,double ress)
+int Graphe::ressources(int base,int ress)
 {
     if(base>ress)
         return base-(base-ress)*0.75;
@@ -1004,6 +1031,7 @@ void Graphe::surbrillance(std::vector<std::vector<int>> tabc)
         }
     }
 }
+
 void Graphe::algodekco()
 {
     m_combi_done=0;
@@ -1183,4 +1211,9 @@ void Graphe::testconnexite(std::vector<int> v)
     lecture(m_nfo);
 }
 
+int Graphe::QUIT()
+{
+    if(m_interface->m_bouton_quit.clicked())
+        return 1;
+}
 ///FIN

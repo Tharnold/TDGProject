@@ -39,12 +39,12 @@
 1523025038 source:d:\thiba\tdgproject\tdgproject\grman\widget.cpp
 	"widget.h"
 
-1523139398 source:d:\thiba\tdgproject\tdgproject\main.cpp
+1523170095 source:d:\thiba\tdgproject\tdgproject\main.cpp
 	"grman/grman.h"
 	<iostream>
 	"graphe.h"
 
-1523141401 d:\thiba\tdgproject\tdgproject\graphe.h
+1523170095 d:\thiba\tdgproject\tdgproject\graphe.h
 	<vector>
 	<map>
 	<string>
@@ -53,33 +53,36 @@
 	<iostream>
 	"grman/grman.h"
 
-1523143299 source:d:\thiba\tdgproject\tdgproject\graphe.cpp
+1523181632 source:d:\thiba\tdgproject\tdgproject\graphe.cpp
 	<chrono>
 	<thread>
 
-1522937081 source:c:\users\pierre philbert\tdgproject\tdgproject\graphe.cpp
-	"graphe.h"
+1523169603 source:c:\users\pierre philbert\tdgproject\tdgproject\graphe.cpp
+	<chrono>
+	<thread>
 
-1522937081 c:\users\pierre philbert\tdgproject\tdgproject\graphe.h
+1523162785 c:\users\pierre philbert\tdgproject\tdgproject\graphe.h
 	<vector>
 	<map>
 	<string>
 	<memory>
+	<fstream>
+	<iostream>
 	"grman/grman.h"
 
-1522937081 c:\users\pierre philbert\tdgproject\tdgproject\grman\grman.h
+1523048882 c:\users\pierre philbert\tdgproject\tdgproject\grman\grman.h
 	<allegro.h>
 	<string>
 	"grman_couleurs.h"
 	"coords.h"
 	"widget.h"
 
-1522937081 c:\users\pierre philbert\tdgproject\tdgproject\grman\grman_couleurs.h
+1523048882 c:\users\pierre philbert\tdgproject\tdgproject\grman\grman_couleurs.h
 
-1522937081 c:\users\pierre philbert\tdgproject\tdgproject\grman\coords.h
+1523048882 c:\users\pierre philbert\tdgproject\tdgproject\grman\coords.h
 	<cmath>
 
-1522937081 c:\users\pierre philbert\tdgproject\tdgproject\grman\widget.h
+1523158274 c:\users\pierre philbert\tdgproject\tdgproject\grman\widget.h
 	"grman.h"
 	<iostream>
 	<string>
@@ -87,10 +90,10 @@
 	<algorithm>
 	<allegro.h>
 
-1522937081 source:c:\users\pierre philbert\tdgproject\tdgproject\grman\coords.cpp
+1523048882 source:c:\users\pierre philbert\tdgproject\tdgproject\grman\coords.cpp
 	"coords.h"
 
-1522937081 source:c:\users\pierre philbert\tdgproject\tdgproject\grman\grman.cpp
+1523051526 source:c:\users\pierre philbert\tdgproject\tdgproject\grman\grman.cpp
 	<cmath>
 	<unordered_map>
 	<unordered_set>
@@ -104,10 +107,10 @@
 	<loadpng.h>
 	<jpgalleg.h>
 
-1522937081 source:c:\users\pierre philbert\tdgproject\tdgproject\grman\widget.cpp
+1523048915 source:c:\users\pierre philbert\tdgproject\tdgproject\grman\widget.cpp
 	"widget.h"
 
-1522937081 source:c:\users\pierre philbert\tdgproject\tdgproject\main.cpp
+1523163090 source:c:\users\pierre philbert\tdgproject\tdgproject\main.cpp
 	"grman/grman.h"
 	<iostream>
 	"graphe.h"
@@ -152,12 +155,12 @@
 1523023406 source:c:\users\hp\tdgproject\tdgproject\grman\widget.cpp
 	"widget.h"
 
-1523181853 source:c:\users\hp\tdgproject\tdgproject\main.cpp
+1523183263 source:c:\users\hp\tdgproject\tdgproject\main.cpp
 	"grman/grman.h"
 	<iostream>
 	"graphe.h"
 
-1523182530 c:\users\hp\tdgproject\tdgproject\graphe.h
+1523183364 c:\users\hp\tdgproject\tdgproject\graphe.h
 	<vector>
 	<map>
 	<string>
@@ -166,7 +169,7 @@
 	<iostream>
 	"grman/grman.h"
 
-1523182322 source:c:\users\hp\tdgproject\tdgproject\graphe.cpp
+1523183223 source:c:\users\hp\tdgproject\tdgproject\graphe.cpp
 	<chrono>
 	<thread>
 	<queue>

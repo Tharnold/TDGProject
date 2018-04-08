@@ -184,6 +184,10 @@ private:
     grman::WidgetButton m_bouton_forteco;
     grman::WidgetText m_bouton_forteco_label;
 
+    //BOUTTON POUR QUITTER
+    grman::WidgetButton m_bouton_quit;
+    grman::WidgetText m_bouton_quit_label;
+
     //BOUTON POUR RESET LES COULEURS DES ARCS
     grman::WidgetButton m_bouton_resetcol;
     grman::WidgetText m_bouton_resetcol_label;
@@ -251,7 +255,6 @@ public:
     //SIMULATION DE L'EVOLUTION DES POPULATIONS DANS LE TEMPS
     void simulation();
     //FONCTION DETERMINANT SI LES RESSOURCES SONT SUFFISANTES
-    double ressources(double base,double ress);
     //RESET DE LA COULEUR DES ARCS
     void resetcol();
     //JESAISPASENCORE
@@ -259,7 +262,9 @@ public:
     void recu(int offset,int k);
     void testconnexite(std::vector<int> v);
     void algodekco();
-
+    int ressources(int base,int ress);
+    //QUITTER
+    int QUIT();
 };
 
 #endif // GRAPHE_H_INCLUDED
