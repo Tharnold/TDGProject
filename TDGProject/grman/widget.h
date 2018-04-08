@@ -364,6 +364,7 @@ class WidgetBox : public Widget
         virtual void interact_focus();
         virtual bool captures_focus() { return true; }
         void set_moveable(bool moveable=true) { m_moveable = moveable; }
+         void set_color(int col){m_border_color=col;}
 };
 
 

@@ -21,7 +21,7 @@ int main()
     //RECUPERATION DU GRAPHE DANS LE FICHER
     test.lecture(nom);
     //DEBUT DE LA BOUCLE D'ACTION
-    while ( !key[KEY_ESC])
+    while ( !key[KEY_ESC] )
     {
         //MISE A JOUR DU GRAPHE
         test.update();
