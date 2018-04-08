@@ -83,7 +83,7 @@ void Sommet::post_update()
         return;
 
     //MAJ DE LA VALEUR ASSOCIEE AU SLIDER
-    //m_fertilite = m_interface->m_slider_value.get_value();
+    m_fertilite = m_interface->m_slider_value.get_value();
 }
 
 ArcInterface::ArcInterface(Sommet& from, Sommet& to)
@@ -424,7 +424,7 @@ void Graphe::simulation()
             popu=0;
         m_sommets[i].m_valeur=popu;
         std::cout << "popu : " << popu << " /   i :   " << i << std::endl;
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+        std::this_thread::sleep_for(std::chrono::milliseconds(20));
 
     }
 }
@@ -663,7 +663,7 @@ void Graphe::update()
 {
 
     int val_ind=0;
-    int b;
+    int b,a;
     std::string nom;
     double fertilite;
     double deces;
@@ -700,6 +700,7 @@ void Graphe::update()
 
     if(m_interface->m_bouton_kco.clicked())
     {
+        sauvegarde(m_nfo);
         algodekco();
         for(int i=0; i<m_ordre; i++)
         {
@@ -755,14 +756,24 @@ void Graphe::update()
     }
 
     //SI ON APPUIE SUR LE BOUTON LINK ET QUE LES SOMMETS DE DEPART ET ARRIVEE SONT DIFFERENTS
-    if(m_interface->m_bouton_link.clicked() && ss1.m_index!=ss2.m_index)
+    if(m_interface->m_bouton_link.clicked() && ss1.m_index!=ss2.m_index )
     {
-        b=0;
+         b=0;
+         a=0;
+        for(int i=0;i<m_arcs.size();i++)
+        {
+            if((m_arcs[i].m_from== ss1.m_index && m_arcs[i].m_to== ss2.m_index ) || (m_arcs[i].m_from== ss2.m_index && m_arcs[i].m_to== ss1.m_index ))
+            {
+
+              a=1;
+            }
+        }
+
 
         //ON CHERCHE UN INDICE A ATTRIBUER A L ARC QUE L ON VA AJOUTER
         while (b==0)
         {
-            for(int i=0; i<m_arcs.size(); i++ )
+            for(int i=0; i<m_arcs.size()+1; i++ )
             {
                 if(val_ind==m_arcs[i].m_indx)
                 {
@@ -778,8 +789,12 @@ void Graphe::update()
         }
 
         //ON CREE L ARC
-        add_interfaced_arc(val_ind,ss1.m_index,ss2.m_index);
+        if(a==0)
+        {
+             add_interfaced_arc(val_ind,ss1.m_index,ss2.m_index);
         m_nbarcs++;
+        }
+
     }
 
     //SI ON CLICK SUR LE BOUTON SAVE
