@@ -424,7 +424,7 @@ void Graphe::simulation()
             popu=0;
         m_sommets[i].m_valeur=popu;
         std::cout << "popu : " << popu << " /   i :   " << i << std::endl;
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
     }
 }
